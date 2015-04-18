@@ -1,0 +1,40 @@
+{
+  "name": "serialize-to-js",
+  "version": "0.1.0",
+  "description": "serialize objects to javascript",
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "dependencies": {
+    "js-beautify": "~1.5.5",
+    "mergee": "~0.1.2"
+  },
+  "scripts": {
+    "test": "mocha test/*.mocha.js",
+    "cover": "istanbul cover _mocha --report lcov --report text -- -R dot --check-leaks test/*.mocha.js",
+    "lint": "jshint --show-non-errors *.js */*.js",
+    "doc": "jsdox -o doc index.js lib/*.js",
+    "clean": "rm -rf doc coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commenthol/serialize-to-js.git"
+  },
+  "keywords": [
+    "serialize",
+    "javascript",
+    "objects"
+  ],
+  "author": "commenthol <commenthol@gmail.com>",
+  "maintainers": "commenthol <commenthol@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/commenthol/serialize-to-js/issues"
+  },
+  "homepage": "https://github.com/commenthol/serialize-to-js"
+}
