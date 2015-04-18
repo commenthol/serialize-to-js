@@ -38,6 +38,6 @@
   },
   "homepage": "https://github.com/commenthol/serialize-to-js",
   "devDependencies": {
-    "mocha": "^2.2.4"
+    "mocha": "~2.2.4"
   }
 }
