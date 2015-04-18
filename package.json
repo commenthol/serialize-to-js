@@ -36,5 +36,8 @@
   "bugs": {
     "url": "https://github.com/commenthol/serialize-to-js/issues"
   },
-  "homepage": "https://github.com/commenthol/serialize-to-js"
+  "homepage": "https://github.com/commenthol/serialize-to-js",
+  "devDependencies": {
+    "mocha": "^2.2.4"
+  }
 }
