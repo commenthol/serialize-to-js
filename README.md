@@ -117,7 +117,3 @@ See [LICENSE][] for more info.
 
 [LICENSE]: ./LICENSE
 
-
-
-
-

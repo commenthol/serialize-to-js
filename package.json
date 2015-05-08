@@ -1,6 +1,6 @@
 {
   "name": "serialize-to-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "serialize objects to javascript",
   "main": "index.js",
   "engines": {

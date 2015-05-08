@@ -11,16 +11,6 @@ var beautify = require('js-beautify').js_beautify;
 var Ref = require('./lib/reference');
 
 /**
- * wrap an object key
- * @api private
- * @param {String} key - objects key
- * @return {String} wrapped key in quotes if necessary
- */
-function _wrapkey(key) {
-	return (/^[a-zA-Z$_][a-zA-Z$_0-9]+$/.test(key) ? key : "'"+key+"'");
-}
-
-/**
  * serializes an object to javascript
  *
  * #### Example - serializing regex, date, buffer, ...
@@ -88,10 +78,10 @@ function serialize(source, opts) {
 			out += source.toString();
 		}
 		else if (util.isDate(source)){
-			out += "new Date('" + source.toJSON() + "')";
+			out += 'new Date("' + source.toJSON() + '")';
 		}
 		else if (util.isError(source)){
-			out += "new Error(" + (source.message ? "'"+source.message+"'" : '') + ")";
+			out += "new Error(" + (source.message ? '"'+source.message+'"' : '') + ")";
 		}
 		else if (util.isBuffer(source)){
 			out += "new Buffer('" + source.toString('base64') + "', 'base64')";
@@ -106,12 +96,12 @@ function serialize(source, opts) {
 						if (opts.reference && util.isObject(source[key])) {
 							opts._refs.push(key);
 							if (!opts._refs.hasReference(source[key])) {
-								tmp.push(_wrapkey(key) + ': ' + serialize(source[key], opts));
+								tmp.push(Ref.wrapkey(key) + ': ' + serialize(source[key], opts));
 							}
 							opts._refs.pop();
 						}
 						else {
-							tmp.push(_wrapkey(key) + ': ' + serialize(source[key], opts));
+							tmp.push(Ref.wrapkey(key) + ': ' + serialize(source[key], opts));
 						}
 					}
 				}
@@ -126,7 +116,7 @@ function serialize(source, opts) {
 		}
 	}
 	else if (util.isString(source)) {
-		out += "'" + source.replace(/'/g, "\\'") + "'";
+		out += '"' + source.replace(/"/g, '\\"') + '"';
 	}
 	else {
 		out += ''+ source;
@@ -168,7 +158,7 @@ function serializeToModule(source, opts) {
 	var out = 'var m = module.exports = ' + serialize(source, opts) + ';\n';
 	if (opts.references) {
 		opts.references.forEach(function(i){
-			out += 'm.' + i[0] + ' = m.' + i[1] + ';\n';
+			out += 'm' + i[0] + ' = m' + i[1] + ';\n';
 		});
 	}
 	if (opts.beautify !== false) {

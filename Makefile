@@ -1,8 +1,7 @@
 all: readme v0.8 v0.10 v0.12
 
 readme: README.md
-	markedpp --githubid $< > tmp.md
-	mv tmp.md $<
+	markedpp --githubid -i $< -o $<
 
 v%:
 	n $@ && npm test
