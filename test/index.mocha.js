@@ -112,11 +112,12 @@ describe('#serialize', function(){
 			one: true,
 			"thr-ee": undefined,
 			"3": "3",
-			"4 four": "four"
+			"4 four": "four",
+			"five\"(5)": 5,
 		};
 		var o = { a: o1, b: o1 };
 		var res = M.serialize(o);
-		var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four"}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four"}}';
+		var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four", "five\\"(5)": 5}}';
 		//~ console.log(res);
 		assert.equal(res, exp);
 	});
