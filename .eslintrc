@@ -1,0 +1,7 @@
+{
+  "extends": "standard",
+  "plugins": [ "standard" ],
+  "rules": {
+    "key-spacing": 0
+  }
+}

@@ -2,7 +2,7 @@
   "name": "serialize-to-js",
   "version": "0.1.2",
   "description": "serialize objects to javascript",
-  "main": "index.js",
+  "main": "lib",
   "engines": {
     "node": ">=0.8.0"
   },
@@ -11,15 +11,26 @@
     "test": "test"
   },
   "dependencies": {
-    "js-beautify": "~1.5.5",
-    "mergee": "~0.1.2"
+    "js-beautify": "~1.6.2",
+    "mergee": "~0.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^2.7.0",
+    "eslint-config-standard": "^5.1.0",
+    "eslint-plugin-promise": "^1.1.0",
+    "eslint-plugin-standard": "^1.3.2",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2"
   },
   "scripts": {
-    "test": "mocha test/*.mocha.js",
-    "cover": "istanbul cover _mocha --report lcov --report text -- -R dot --check-leaks test/*.mocha.js",
-    "lint": "jshint --show-non-errors *.js */*.js",
-    "doc": "jsdox -o doc index.js lib/*.js",
-    "clean": "rm -rf doc coverage"
+    "prepublish": "npm run lint && npm run test",
+    "test": "mocha --reporter spec --check-leaks test/*.mocha.js",
+    "cover": "istanbul cover _mocha --report lcov --report text -- --reporter dot --check-leaks test/*.mocha.js",
+    "doc": "jsdox -o doc lib/*.js",
+    "lint": "eslint --quiet '**/*.js'",
+    "readme": "markedpp --githubid -i README.md -o README.md",
+    "clean": "rimraf doc coverage node_modules"
   },
   "repository": {
     "type": "git",
@@ -36,8 +47,5 @@
   "bugs": {
     "url": "https://github.com/commenthol/serialize-to-js/issues"
   },
-  "homepage": "https://github.com/commenthol/serialize-to-js",
-  "devDependencies": {
-    "mocha": "~2.2.4"
-  }
+  "homepage": "https://github.com/commenthol/serialize-to-js"
 }

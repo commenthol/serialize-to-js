@@ -13,6 +13,7 @@ Serialize objects into a `require`-able module while checking circular structure
 
 * [Methods](#methods)
   * [serialize](#serialize)
+  * [deserialize](#deserialize)
   * [serializeToModule](#serializetomodule)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
@@ -31,14 +32,20 @@ serializes an object to javascript
 
 ```js
 var serialize = require('serialize-to-js').serialize;
-var obj = { object: {
-        regexp: /^test?$/,
-        date: new Date(),
-        buffer: new Buffer('data'),
-        number: 3.1415,
-        string: "test" } };
-console.log(serialize(obj));
-//> {object: {regexp: /^test?$/, date: new Date('2015-04-18T20:01:51.903Z'), buffer: new Buffer('ZGF0YQ==', 'base64'), number: 3.1415, string: 'test'}}
+var obj = {
+  str: '<script>var a = 0 > 1</script>',
+  num: 3.1415,
+  bool: true,
+  nil: null,
+  undef: undefined,
+  obj: { foo: 'bar' },
+  arr: [1, '2'],
+  regexp: /^test?$/,
+  date: new Date(),
+  buffer: new Buffer('data'),
+}
+console.log(serialize(obj))
+// > {str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E", num: 3.1415, bool: true, nil: null, undef: undefined, obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z"), buffer: new Buffer('ZGF0YQ==', 'base64')}
 ```
 
 #### Example - serializing while respecting references
@@ -65,6 +72,31 @@ console.log(opts.references);
 **opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)
 
 **Returns**: `String`, serialized representation of `source`
+
+
+### deserialize
+
+`deserialize(str)`
+
+deserialize a serialized object to javascript
+
+#### Example - serializing regex, date, buffer, ...
+
+```js
+var str = '{obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z")}'
+var res = deserialize(str)
+console.log(res)
+//> { obj: { foo: 'bar' },
+//>   arr: [ 1, '2' ],
+//>   regexp: /^test?$/,
+//>   date: Sat Apr 16 2016 01:22:52 GMT+0900 (JST) }
+```
+
+**Parameters**
+
+**str**: `String`, string containing serilaized data
+
+**Returns**: `Any`, deserialized data
 
 
 ### serializeToModule
@@ -111,9 +143,8 @@ with the source of its origin and licence.
 
 ## License
 
-Copyright (c) 2015 commenthol (MIT License)
+Copyright (c) 2016 commenthol (MIT License)
 
 See [LICENSE][] for more info.
 
 [LICENSE]: ./LICENSE
-
