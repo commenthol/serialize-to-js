@@ -101,7 +101,7 @@ console.log(res)
 
 ### serializeToModule
 
-`serializeToModule(source, opts, opts.ignoreCircular, opts.reference, opts.beautify)`
+`serializeToModule(source, opts, opts.ignoreCircular, opts.reference, opts.comment, opts.beautify) `
 
 serialize to a module which can be `require`ed.
 
@@ -129,6 +129,8 @@ console.log(serialTM(obj, { reference: true }));
 **opts.ignoreCircular**: `Boolean`, ignore circular objects
 
 **opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)
+
+**opts.comment**: `Boolean`, add a comments - useful for linting tools e.g. using 'eslint-disable'
 
 **opts.beautify**: `Boolean | Object`, beautify output - default is `false`. If Object then use je-beautify options.
 
