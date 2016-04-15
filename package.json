@@ -24,7 +24,6 @@
     "rimraf": "^2.5.2"
   },
   "scripts": {
-    "prepublish": "npm run lint && npm run test",
     "test": "mocha --reporter spec --check-leaks test/*.mocha.js",
     "cover": "istanbul cover _mocha --report lcov --report text -- --reporter dot --check-leaks test/*.mocha.js",
     "doc": "jsdox -o doc lib/*.js",
