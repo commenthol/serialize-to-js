@@ -93,6 +93,60 @@ describe('#serialize simple', function () {
     var exp = '[true, false, undefined, 1, 3.1415, -17, "string"]'
     assert.equal(res, exp)
   })
+  it('Int8Array only', function () {
+    var a = new Int8Array([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Int8Array([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Uint8Array only', function () {
+    var a = new Uint8Array([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Uint8Array([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Uint8ClampedArray only', function () {
+    var a = new Uint8ClampedArray([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Uint8ClampedArray([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Int16Array only', function () {
+    var a = new Int16Array([-1, 0, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Int16Array([-1, 0, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Uint16Array only', function () {
+    var a = new Uint16Array([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Uint16Array([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Int32Array only', function () {
+    var a = new Int32Array([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Int32Array([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Uint32Array only', function () {
+    var a = new Uint32Array([1, 2, 3, 4, 5])
+    var res = M.serialize(a)
+    var exp = 'new Uint32Array([1, 2, 3, 4, 5])'
+    assert.equal(res, exp)
+  })
+  it('Float32Array only', function () {
+    var a = new Float32Array([1e10, 2000000, 3.1415, -4.9e2, 5])
+    var res = M.serialize(a)
+    var exp = 'new Float32Array([10000000000, 2000000, 3.1414999961853027, -490, 5])'
+    assert.equal(res, exp)
+  })
+  it('Float64Array only', function () {
+    var a = new Float64Array([1e12, 2000000, 3.1415, -4.9e2, 5])
+    var res = M.serialize(a)
+    var exp = 'new Float64Array([1000000000000, 2000000, 3.1415, -490, 5])'
+    assert.equal(res, exp)
+  })
   it('object of primitives only', function () {
     var o = {
       one: true,

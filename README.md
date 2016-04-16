@@ -7,6 +7,27 @@
 
 Serialize objects into a `require`-able module while checking circular structures and respecting references.
 
+The following Objects are supported
+
+- String
+- Number
+- Boolean
+- Object
+- Array
+- RegExp
+- Error
+- Date
+- Buffer
+- Int8Array
+- Uint8Array
+- Uint8ClampedArray
+- Int16Array
+- Uint16Array
+- Int32Array
+- Uint32Array
+- Float32Array
+- Float64Arra
+
 ## Table of Contents
 
 <!-- !toc (minlevel=2 omit="Table of Contents") -->
@@ -80,7 +101,7 @@ console.log(opts.references);
 
 deserialize a serialized object to javascript
 
-#### Example - serializing regex, date, buffer, ...
+#### Example - deserializing regex, date, ...
 
 ```js
 var str = '{obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z")}'
@@ -94,7 +115,7 @@ console.log(res)
 
 **Parameters**
 
-**str**: `String`, string containing serilaized data
+**str**: `String`, string containing serialized data
 
 **Returns**: `Any`, deserialized data
 

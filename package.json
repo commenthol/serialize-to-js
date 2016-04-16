@@ -11,8 +11,7 @@
     "test": "test"
   },
   "dependencies": {
-    "js-beautify": "~1.6.2",
-    "mergee": "~0.2.3"
+    "js-beautify": "~1.6.2"
   },
   "devDependencies": {
     "eslint": "^2.7.0",
@@ -26,7 +25,7 @@
   "scripts": {
     "test": "mocha --reporter spec --check-leaks test/*.mocha.js",
     "cover": "istanbul cover _mocha --report lcov --report text -- --reporter dot --check-leaks test/*.mocha.js",
-    "doc": "jsdox -o doc lib/*.js",
+    "doc": "jsdox -o doc lib/index.js",
     "lint": "eslint --quiet '**/*.js'",
     "readme": "markedpp --githubid -i README.md -o README.md",
     "clean": "rimraf doc coverage node_modules"
