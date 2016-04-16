@@ -13,7 +13,7 @@ function log (arg) {
 }
 
 function getObj (str) {
-  return new Function('var module = {};\n' + str + '\n return m;')()
+  return new Function('var module = {};\n' + str + ';\nreturn module.exports')()
 }
 
 describe('#serialize simple', function () {
@@ -45,6 +45,11 @@ describe('#serialize simple', function () {
   it('undefined only', function () {
     var res = M.serialize(undefined)
     var exp = 'undefined'
+    assert.equal(res, exp)
+  })
+  it('null only', function () {
+    var res = M.serialize(null)
+    var exp = 'null'
     assert.equal(res, exp)
   })
   it('regex only', function () {
@@ -236,12 +241,26 @@ describe('#serialize', function () {
       M.serialize(o)
     }, /can not convert circular structures/)
   })
+
+  it('ignore circularity', function () {
+    var o = {
+      a: {
+        b: {}
+      }
+    }
+    o.a.b = o.a
+    var res = M.serialize(o, {ignoreCircular: true})
+    var exp = '{a: {b: {/*[Circular]*/}}}'
+    // log(res)
+    assert.deepEqual(res, exp)
+  })
 })
 
 describe('#serializeToModule', function () {
   it('object of objects', function () {
     var r = {
       one: true,
+      two: 'a string\nwith multiple\r\nlines.',
       'thr-ee': undefined
     }
     var o = {
@@ -252,14 +271,15 @@ describe('#serializeToModule', function () {
       }
     }
     var res = M.serializeToModule(o)
-    var exp = 'var m = module.exports = {\n\ta: {\n\t\tone: true,\n\t\t"thr-ee": undefined\n\t},\n\tb: {\n\t\tone: true,\n\t\t"thr-ee": undefined\n\t},\n\tc: {\n\t\td: {\n\t\t\tone: true,\n\t\t\t"thr-ee": undefined\n\t\t}\n\t}\n};'
-      // ~ log(res);
+    var exp = 'module.exports = {\n\ta: {\n\t\tone: true,\n\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t"thr-ee": undefined\n\t},\n\tb: {\n\t\tone: true,\n\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t"thr-ee": undefined\n\t},\n\tc: {\n\t\td: {\n\t\t\tone: true,\n\t\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t\t"thr-ee": undefined\n\t\t}\n\t}\n};'
+    // log(res)
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
   })
   it('object of objects using references', function () {
     var r = {
       one: true,
+      two: 'a string\nwith multiple\r\nlines.',
       'thr-ee': undefined
     }
     var o = {
@@ -277,8 +297,8 @@ describe('#serializeToModule', function () {
       reference: true,
       beautify: false
     })
-    var exp = 'var m = module.exports = {"0": {one: true, "thr-ee": undefined}, c: {}};\nm.a = m["0"];\nm.b = m["0"];\nm.c["0"] = m["0"];\nm.c.d = m["0"];\nm.c["spa ce"] = m["0"];\nm["spa ce"] = m["0"];\n'
-      // ~ log(res);
+    var exp = 'var m = module.exports = {"0": {one: true, two: "a string\\nwith multiple\\r\\nlines.", "thr-ee": undefined}, c: {}};\nm.a = m["0"];\nm.b = m["0"];\nm.c["0"] = m["0"];\nm.c.d = m["0"];\nm.c["spa ce"] = m["0"];\nm["spa ce"] = m["0"];\n'
+    // log(res)
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
   })
@@ -311,7 +331,7 @@ describe('#serializeToModule', function () {
     var res = M.serializeToModule(o, {
       comment: 'eslint-disable'
     })
-    var exp = '/* eslint-disable */\nvar m = module.exports = {\n\ta: {\n\t\tb: "one"\n\t}\n};'
+    var exp = '/* eslint-disable */\nmodule.exports = {\n\ta: {\n\t\tb: "one"\n\t}\n};'
     // log(res)
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
