@@ -26,7 +26,7 @@ The following Objects are supported
 - Int32Array
 - Uint32Array
 - Float32Array
-- Float64Arra
+- Float64Array
 
 ## Table of Contents
 
@@ -79,7 +79,7 @@ var opts = { reference: true };
 console.log(serialize(obj, opts));
 //> {object: {regexp: /^test?$/}}
 console.log(opts.references);
-//> [ [ 'reference', 'object' ] ]
+//> [ [ '.reference', '.object' ] ]
 ```
 
 **Parameters**
