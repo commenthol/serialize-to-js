@@ -179,7 +179,7 @@ describe('#serialize', function () {
       one: true,
       'thr-ee': undefined,
       '3': '3',
-      '4 four': 'four',
+      '4 four': 'four\n<test></test>',
       'five"(5)': 5
     }
     var o = {
@@ -187,11 +187,10 @@ describe('#serialize', function () {
       b: o1
     }
     var res = M.serialize(o)
-    var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four", "five\\"(5)": 5}}'
-      // ~ console.log(res);
+    var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}}'
+    // console.log(JSON.stringify(res))
     assert.equal(res, exp)
   })
-
   it('converting an object of objects using references', function () {
     var r = {
       one: true,
@@ -229,7 +228,6 @@ describe('#serialize', function () {
     assert.equal(res, exp)
     assert.deepEqual(opts.references, refs)
   })
-
   it('converting a circular object throws', function () {
     var o = {
       a: {
@@ -241,7 +239,6 @@ describe('#serialize', function () {
       M.serialize(o)
     }, /can not convert circular structures/)
   })
-
   it('ignore circularity', function () {
     var o = {
       a: {
@@ -253,6 +250,23 @@ describe('#serialize', function () {
     var exp = '{a: {b: {/*[Circular]*/}}}'
     // log(res)
     assert.deepEqual(res, exp)
+  })
+  it('converting an object of objects with opts.unsafe', function () {
+    var o1 = {
+      one: true,
+      'thr-ee': undefined,
+      '3': '3',
+      '4 four': 'four\n<test></test>',
+      'five"(5)': 5
+    }
+    var o = {
+      a: o1,
+      b: o1
+    }
+    var res = M.serialize(o, {unsafe: true})
+    var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}}'
+    // console.log(JSON.stringify(res))
+    assert.equal(res, exp)
   })
 })
 
@@ -318,7 +332,7 @@ describe('#serializeToModule', function () {
       reference: true
     })
     var exp = 'var m = module.exports = {\n\ta: {\n\t\tone: true,\n\t\t"thr-ee": /^test$/\n\t},\n\tc: {}\n};\nm.b = m.a;\nm.c.d = m.a;'
-      // ~ log(res);
+    // log(res);
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
   })

@@ -18,14 +18,9 @@ The following Objects are supported
 - Error
 - Date
 - Buffer
-- Int8Array
-- Uint8Array
-- Uint8ClampedArray
-- Int16Array
-- Uint16Array
-- Int32Array
-- Uint32Array
-- Float32Array
+- Int8Array, Uint8Array, Uint8ClampedArray
+- Int16Array, Uint16Array
+- Int32Array, Uint32Array, Float32Array
 - Float64Array
 
 ## Table of Contents
@@ -92,6 +87,8 @@ console.log(opts.references);
 
 **opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)
 
+**opts.unsafe**: `Boolean`, do not escape chars `<>/`
+
 **Returns**: `String`, serialized representation of `source`
 
 
@@ -154,6 +151,8 @@ console.log(serialTM(obj, { reference: true }));
 **opts.comment**: `Boolean`, add a comments - useful for linting tools e.g. using 'eslint-disable'
 
 **opts.beautify**: `Boolean | Object`, beautify output - default is `false`. If Object then use je-beautify options.
+
+**opts.unsafe**: `Boolean`, do not escape chars `<>/`
 
 **Returns**: `String`, serialized representation of `source` as module
 
