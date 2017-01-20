@@ -1,6 +1,6 @@
 {
   "name": "serialize-to-js",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "serialize objects to javascript",
   "main": "lib",
   "engines": {
@@ -48,7 +48,9 @@
   "homepage": "https://github.com/commenthol/serialize-to-js",
   "eslintConfig": {
     "extends": "standard",
-    "plugins": [ "standard" ],
+    "plugins": [
+      "standard"
+    ],
     "rules": {
       "key-spacing": 0
     }
