@@ -165,7 +165,7 @@ with the source of its origin and licence.
 
 ## License
 
-Copyright (c) 2016 commenthol (MIT License)
+Copyright (c) 2016- commenthol (MIT License)
 
 See [LICENSE][] for more info.
 
