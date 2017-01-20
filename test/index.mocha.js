@@ -1,6 +1,4 @@
-/* eslint
-   no-new-func: 0
- */
+/* eslint no-new-func: 0 */
 /* global describe, it */
 
 'use strict'
@@ -23,8 +21,8 @@ describe('#serialize simple', function () {
     assert.equal(res, exp)
   })
   it('string only', function () {
-    var res = M.serialize("string's\n\"new\"\t line")
-    var exp = '"string\'s\\n\\"new\\"\\t line"'
+    var res = M.serialize("string's\n\"new\"   line")
+    var exp = '"string\'s\\n\\"new\\"   line"'
     assert.equal(res, exp)
   })
   it('string with unsafe characters', function () {
@@ -285,7 +283,7 @@ describe('#serializeToModule', function () {
       }
     }
     var res = M.serializeToModule(o)
-    var exp = 'module.exports = {\n\ta: {\n\t\tone: true,\n\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t"thr-ee": undefined\n\t},\n\tb: {\n\t\tone: true,\n\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t"thr-ee": undefined\n\t},\n\tc: {\n\t\td: {\n\t\t\tone: true,\n\t\t\ttwo: "a string\\nwith multiple\\r\\nlines.",\n\t\t\t"thr-ee": undefined\n\t\t}\n\t}\n};'
+    var exp = 'module.exports = {\n  a: {\n    one: true,\n    two: "a string\\nwith multiple\\r\\nlines.",\n    "thr-ee": undefined\n  },\n  b: {\n    one: true,\n    two: "a string\\nwith multiple\\r\\nlines.",\n    "thr-ee": undefined\n  },\n  c: {\n    d: {\n      one: true,\n      two: "a string\\nwith multiple\\r\\nlines.",\n      "thr-ee": undefined\n    }\n  }\n};'
     // log(res)
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
@@ -331,7 +329,7 @@ describe('#serializeToModule', function () {
     var res = M.serializeToModule(o, {
       reference: true
     })
-    var exp = 'var m = module.exports = {\n\ta: {\n\t\tone: true,\n\t\t"thr-ee": /^test$/\n\t},\n\tc: {}\n};\nm.b = m.a;\nm.c.d = m.a;'
+    var exp = 'var m = module.exports = {\n  a: {\n    one: true,\n    "thr-ee": /^test$/\n  },\n  c: {}\n};\nm.b = m.a;\nm.c.d = m.a;'
     // log(res);
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
@@ -345,7 +343,7 @@ describe('#serializeToModule', function () {
     var res = M.serializeToModule(o, {
       comment: 'eslint-disable'
     })
-    var exp = '/* eslint-disable */\nmodule.exports = {\n\ta: {\n\t\tb: "one"\n\t}\n};'
+    var exp = '/* eslint-disable */\nmodule.exports = {\n  a: {\n    b: "one"\n  }\n};'
     // log(res)
     assert.equal(res, exp)
     assert.deepEqual(o, getObj(res))
