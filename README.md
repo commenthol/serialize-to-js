@@ -98,6 +98,10 @@ console.log(opts.references);
 
 deserialize a serialized object to javascript
 
+> _NOTE_: Deserialization uses `new Function()` for code evaluation which may be "harmful".
+> In default mode input code gets inspected, but removing `new Function, function, eval` might still not be sufficient.  
+> **SO NOW YOU ARE WARNED!**
+
 #### Example - deserializing regex, date, ...
 
 ```js
@@ -113,6 +117,8 @@ console.log(res)
 **Parameters**
 
 **str**: `String`, string containing serialized data
+
+**unsafe**: `Boolean`, if `true` unsafe and harmful code evaluation (default=false)
 
 **Returns**: `Any`, deserialized data
 

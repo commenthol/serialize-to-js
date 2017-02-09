@@ -368,3 +368,20 @@ describe('#serialize and deserialize', function () {
     assert.deepEqual(res, obj)
   })
 })
+
+describe('#deserialize', function () {
+  it('harmful IIFE using `function` should get removed and deserialize should throw', function () {
+    var str = "(\n\tfunction(){ global.x = 'test'; eval('console.log(`exploited`)') })()"
+    assert.throws(
+      function () {
+        M.deserialize(str)
+      }, /SyntaxError/
+    )
+  })
+  it('harmful IIFE using `new Function` should get removed', function () {
+    var str = "new Function('return console.log(`exploited`)')()"
+    var res = M.deserialize(str)
+    assert.equal(typeof res, 'string')
+    assert.equal(res, 'return console.log(`exploited`)')
+  })
+})
