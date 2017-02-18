@@ -6,4 +6,7 @@ readme: README.md
 v%:
 	n $@ && npm test
 
-.PHONY: all readme
+zuul:
+	node_modules/.bin/zuul --local 3000 test/*.js
+
+.PHONY: all readme zuul

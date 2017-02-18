@@ -1,6 +1,7 @@
-node_modules/
+node_modules
 coverage/
 doc/
 tmp/
 *.log
 *.tgz
+*.sh

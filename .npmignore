@@ -1,9 +1,10 @@
-node_modules/
+node_modules
 coverage/
 test/
 doc/
 tmp/
+Makefile
 .*
 *.log
 *.tgz
-Makefile
+*.sh
