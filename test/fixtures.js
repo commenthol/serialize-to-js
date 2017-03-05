@@ -126,6 +126,9 @@ module.exports = {
 }
 
 if (!isBrowser) {
+  if (typeof Object.assign === 'undefined') {
+    require('core-js/fn/object/assign.js')
+  }
   Object.assign(module.exports, {
     'buffer': [
       new Buffer('buffer'),
