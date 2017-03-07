@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "js-beautify": "~1.6.8",
-    "safer-eval": "^1.2.0"
+    "safer-eval": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "^3.13.1",
