@@ -8,7 +8,7 @@ var M = require('..')
 var serialize = M.serialize
 var fixtures = require('./fixtures')
 
-function log (arg) {
+function log (arg) { // eslint-disable-line no-unused-vars
   console.log(JSON.stringify(arg))
 }
 

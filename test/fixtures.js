@@ -131,12 +131,21 @@ if (!isBrowser) {
   }
   Object.assign(module.exports, {
     'buffer': [
-      new Buffer('buffer'),
+      new Buffer('buffer'), // eslint-disable-line node/no-deprecated-api
       "new Buffer('YnVmZmVy', 'base64')"
     ],
     'empty buffer': [
-      new Buffer(''),
+      new Buffer(''), // eslint-disable-line node/no-deprecated-api
       "new Buffer('', 'base64')"
     ]
   })
+
+  if (Buffer.from) {
+    Object.assign(module.exports, {
+      'buffer.from': [
+        Buffer.from('buffer'),
+        "new Buffer('YnVmZmVy', 'base64')"
+      ]
+    })
+  }
 }

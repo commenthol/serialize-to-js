@@ -2,8 +2,8 @@ sudo: false
 language: node_js
 
 node_js:
-  - "4.8"
-  - "6.10"
+  - 6
+  - 8
   - node
 
 script:
