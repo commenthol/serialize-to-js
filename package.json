@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "js-beautify": "~1.7.5",
+    "js-beautify": "^1.7.5",
     "safer-eval": "^1.2.3"
   },
   "devDependencies": {

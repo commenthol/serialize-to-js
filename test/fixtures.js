@@ -126,26 +126,14 @@ module.exports = {
 }
 
 if (!isBrowser) {
-  if (typeof Object.assign === 'undefined') {
-    require('core-js/fn/object/assign.js')
-  }
   Object.assign(module.exports, {
     'buffer': [
-      new Buffer('buffer'), // eslint-disable-line node/no-deprecated-api
-      "new Buffer('YnVmZmVy', 'base64')"
+      Buffer.from('buffer'), // eslint-disable-line node/no-deprecated-api
+      "Buffer.from('YnVmZmVy', 'base64')"
     ],
     'empty buffer': [
-      new Buffer(''), // eslint-disable-line node/no-deprecated-api
-      "new Buffer('', 'base64')"
+      Buffer.from(''), // eslint-disable-line node/no-deprecated-api
+      "Buffer.from('', 'base64')"
     ]
   })
-
-  if (Buffer.from) {
-    Object.assign(module.exports, {
-      'buffer.from': [
-        Buffer.from('buffer'),
-        "new Buffer('YnVmZmVy', 'base64')"
-      ]
-    })
-  }
 }
