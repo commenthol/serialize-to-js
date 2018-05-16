@@ -43,6 +43,10 @@ module.exports = {
     {},
     '{}'
   ],
+  'object with backslash': [
+    {backslash: '\\'},
+    '{backslash: "\\\\"}'
+  ],
   'object of primitives': [
     {
       one: true,
