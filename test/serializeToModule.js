@@ -6,6 +6,10 @@
 var assert = require('assert')
 var serializeToModule = require('..').serializeToModule
 
+if (typeof assert.deepStrictEqual === 'undefined') {
+  assert.deepStrictEqual = assert.deepEqual // eslint-disable-line
+}
+
 function log (arg) { // eslint-disable-line no-unused-vars
   console.log(JSON.stringify(arg))
 }
@@ -31,8 +35,8 @@ describe('#serializeToModule', function () {
     var res = serializeToModule(o)
     var exp = 'module.exports = {\n  a: {\n    one: true,\n    two: "a string\\nwith multiple\\r\\nlines.",\n    "thr-ee": undefined\n  },\n  b: {\n    one: true,\n    two: "a string\\nwith multiple\\r\\nlines.",\n    "thr-ee": undefined\n  },\n  c: {\n    d: {\n      one: true,\n      two: "a string\\nwith multiple\\r\\nlines.",\n      "thr-ee": undefined\n    }\n  }\n};'
     // log(res)
-    assert.equal(res, exp)
-    assert.deepEqual(o, getObj(res))
+    assert.strictEqual(res, exp)
+    assert.deepStrictEqual(o, getObj(res))
   })
   it('object of objects using references', function () {
     var r = {
@@ -57,8 +61,8 @@ describe('#serializeToModule', function () {
     })
     var exp = 'var m = module.exports = {"0": {one: true, two: "a string\\nwith multiple\\r\\nlines.", "thr-ee": undefined}, c: {}};\nm.a = m["0"];\nm.b = m["0"];\nm.c["0"] = m["0"];\nm.c.d = m["0"];\nm.c["spa ce"] = m["0"];\nm["spa ce"] = m["0"];\n'
     // log(res)
-    assert.equal(res, exp)
-    assert.deepEqual(o, getObj(res))
+    assert.strictEqual(res, exp)
+    assert.deepStrictEqual(o, getObj(res))
   })
   it('object of objects - beautify', function () {
     var r = {
@@ -77,8 +81,8 @@ describe('#serializeToModule', function () {
     })
     var exp = 'var m = module.exports = {\n  a: {\n    one: true,\n    "thr-ee": /^test$/\n  },\n  c: {}\n};\nm.b = m.a;\nm.c.d = m.a;'
     // log(res);
-    assert.equal(res, exp)
-    assert.deepEqual(o, getObj(res))
+    assert.strictEqual(res, exp)
+    assert.deepStrictEqual(o, getObj(res))
   })
   it('obj - with comments header', function () {
     var o = {
@@ -91,7 +95,7 @@ describe('#serializeToModule', function () {
     })
     var exp = '/* eslint-disable */\nmodule.exports = {\n  a: {\n    b: "one"\n  }\n};'
     // log(res)
-    assert.equal(res, exp)
-    assert.deepEqual(o, getObj(res))
+    assert.strictEqual(res, exp)
+    assert.deepStrictEqual(o, getObj(res))
   })
 })

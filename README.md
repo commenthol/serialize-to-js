@@ -58,7 +58,7 @@ var obj = {
   arr: [1, '2'],
   regexp: /^test?$/,
   date: new Date(),
-  buffer: new Buffer('data'),
+  buffer: Buffer.from('data'),
 }
 console.log(serialize(obj))
 // > {str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E", num: 3.1415, bool: true, nil: null, undef: undefined, obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z"), buffer: new Buffer('ZGF0YQ==', 'base64')}
