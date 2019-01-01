@@ -36,7 +36,7 @@ module.exports = {
     '/test(?:it)?/gi'
   ],
   'object': [
-    {a: 1, b: 2},
+    { a: 1, b: 2 },
     '{a: 1, b: 2}'
   ],
   'empty object': [
@@ -44,7 +44,7 @@ module.exports = {
     '{}'
   ],
   'object with backslash': [
-    {backslash: '\\'},
+    { backslash: '\\' },
     '{backslash: "\\\\"}'
   ],
   'object of primitives': [

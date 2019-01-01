@@ -8,6 +8,10 @@ var M = require('..')
 var serialize = M.serialize
 var fixtures = require('./fixtures')
 
+if (typeof assert.deepStrictEqual === 'undefined') {
+  assert.deepStrictEqual = assert.deepEqual // eslint-disable-line
+}
+
 function log (arg) { // eslint-disable-line no-unused-vars
   console.log(JSON.stringify(arg))
 }
@@ -20,7 +24,11 @@ describe('#serialize', function () {
         var inp = tc[0]
         var exp = tc[1]
         var res = serialize(inp)
-        assert.strictEqual(res, exp)
+        if (typeof exp === 'object') {
+          assert.deepStrictEqual(res, exp)
+        } else {
+          assert.strictEqual(res, exp)
+        }
       })
     })
   })
@@ -39,7 +47,7 @@ describe('#serialize', function () {
     var res = serialize(o)
     var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}}'
     // console.log(JSON.stringify(res))
-    assert.equal(res, exp)
+    assert.strictEqual(res, exp)
   })
   it('converting an object of objects using references', function () {
     var r = {
@@ -74,8 +82,8 @@ describe('#serialize', function () {
       ['.c["spa ce"]', '.a'],
       ['["spa ce"]', '.a']
     ]
-    assert.equal(res, exp)
-    assert.deepEqual(opts.references, refs)
+    assert.strictEqual(res, exp)
+    assert.deepStrictEqual(opts.references, refs)
   })
   it('converting a circular object throws', function () {
     var o = {
@@ -95,9 +103,9 @@ describe('#serialize', function () {
       }
     }
     o.a.b = o.a
-    var res = serialize(o, {ignoreCircular: true})
+    var res = serialize(o, { ignoreCircular: true })
     var exp = '{a: {b: {/*[Circular]*/}}}'
-    assert.deepEqual(res, exp)
+    assert.deepStrictEqual(res, exp)
   })
   it('converting an object of objects with opts.unsafe', function () {
     var o1 = {
@@ -111,8 +119,8 @@ describe('#serialize', function () {
       a: o1,
       b: o1
     }
-    var res = serialize(o, {unsafe: true})
+    var res = serialize(o, { unsafe: true })
     var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}}'
-    assert.equal(res, exp)
+    assert.strictEqual(res, exp)
   })
 })

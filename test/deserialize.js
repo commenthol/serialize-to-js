@@ -9,6 +9,10 @@ var serialize = M.serialize
 var deserialize = M.deserialize
 var fixtures = require('./fixtures')
 
+if (typeof assert.deepStrictEqual === 'undefined') {
+  assert.deepStrictEqual = assert.deepEqual // eslint-disable-line
+}
+
 function log (arg) { // eslint-disable-line no-unused-vars
   console.log(JSON.stringify(arg))
 }
@@ -27,7 +31,7 @@ describe('#deserialize', function () {
             assert.strictEqual(res.toString(), exp.toString())
             break
           default:
-            assert.deepEqual(res, exp)
+            assert.deepEqual(res, exp) // eslint-disable-line node/no-deprecated-api
         }
       })
     })
@@ -56,12 +60,12 @@ describe('#deserialize', function () {
     it('should not throw on using `new Function`', function () {
       var str = "new Function('return 25 + 9')()"
       var res = deserialize(str, true)
-      assert.equal(res, 34)
+      assert.strictEqual(res, 34)
     })
     it('should not throw on using `eval`', function () {
       var str = "eval('25 + 9')"
       var res = deserialize(str, true)
-      assert.equal(res, 34)
+      assert.strictEqual(res, 34)
     })
   })
 
@@ -73,13 +77,13 @@ describe('#deserialize', function () {
         bool: true,
         nil: null,
         undef: undefined,
-        obj: {foo: 'bar'},
+        obj: { foo: 'bar' },
         arr: [1, '2'],
         regexp: /^test?$/,
         date: new Date()
       }
       var res = deserialize(serialize(obj), {})
-      assert.deepEqual(res, obj)
+      assert.deepEqual(res, obj) // eslint-disable-line node/no-deprecated-api
     })
   })
 })
