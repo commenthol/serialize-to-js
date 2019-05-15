@@ -64,6 +64,18 @@ module.exports = {
     log.toString(),
     'toString'
   ],
+  'arrow function': [
+    (a) => a + 1,
+    '(a) => a + 1'
+  ],
+  'shorthand method': [
+    { key (a) { return a + 1 } },
+    '{key: function key (a) { return a + 1 }}'
+  ],
+  'arrow function in object': [
+    { key: (a) => a + 1 },
+    '{key: (a) => a + 1}'
+  ],
   'date': [
     new Date(24 * 12 * 3600000),
     'new Date("1970-01-13T00:00:00.000Z")'
