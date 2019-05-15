@@ -92,38 +92,6 @@ console.log(opts.references);
 **Returns**: `String`, serialized representation of `source`
 
 
-### deserialize
-
-`deserialize(str, [context])`
-
-deserialize a serialized object to javascript
-
-> _NOTE_: Deserialization uses `new Function()` for code evaluation which may be "harmful".
-> **SO NOW YOU ARE WARNED!**
-
-Uses [safer-eval][] for deserialization.
-
-#### Example - deserializing regex, date, ...
-
-```js
-var str = '{obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z")}'
-var res = deserialize(str)
-console.log(res)
-//> { obj: { foo: 'bar' },
-//>   arr: [ 1, '2' ],
-//>   regexp: /^test?$/,
-//>   date: Sat Apr 16 2016 01:22:52 GMT+0900 (JST) }
-```
-
-**Parameters**
-
-**str**: `String`, string containing serialized data
-
-**context**: (optional) pass context e.g. if requiring Buffer use `{Buffer: Buffer}`.
-
-**Returns**: `Any`, deserialized data
-
-
 ### serializeToModule
 
 `serializeToModule(source, opts, opts.ignoreCircular, opts.reference, opts.comment, opts.beautify) `
