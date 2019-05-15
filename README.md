@@ -29,7 +29,6 @@ The following Objects are supported
 
 * [Methods](#methods)
   * [serialize](#serialize)
-  * [deserialize](#deserialize)
   * [serializeToModule](#serializetomodule)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
