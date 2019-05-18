@@ -69,8 +69,8 @@ module.exports = {
     '(a) => a + 1'
   ],
   'shorthand method': [
-    { key (a) { return a + 1 } },
-    '{key: function key (a) { return a + 1 }}'
+    { key(a) { return a + 1 } }, // eslint-disable-line
+    '{key: function key(a) { return a + 1 }}'
   ],
   'arrow function in object': [
     { key: (a) => a + 1 },
