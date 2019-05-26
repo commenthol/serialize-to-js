@@ -4,8 +4,7 @@
 'use strict'
 
 var assert = require('assert')
-var M = require('..')
-var serialize = M.serialize
+var serialize = require('..')
 var fixtures = require('./fixtures')
 
 if (typeof assert.deepStrictEqual === 'undefined') {

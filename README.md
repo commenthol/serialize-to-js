@@ -5,7 +5,7 @@
 [![NPM version](https://badge.fury.io/js/serialize-to-js.svg)](https://www.npmjs.com/package/serialize-to-js/)
 [![Build Status](https://secure.travis-ci.org/commenthol/serialize-to-js.svg?branch=master)](https://travis-ci.org/commenthol/serialize-to-js)
 
-Serialize objects into a `require`-able module while checking circular structures and respecting references.
+Serialize objects into a string while checking circular structures and respecting references.
 
 The following Objects are supported
 
@@ -23,13 +23,23 @@ The following Objects are supported
 - Int32Array, Uint32Array, Float32Array
 - Float64Array
 
+> **Note:** Version >3.0.0 has moved the serializeToModule method into its own
+> package at [serialize-to-module][]  
+>
+> Migrating from 2.x to 3.x for serialize:
+> ```js
+> // v2.x
+> const serialize = require('serialize-to-js').serialize
+> // >v3.x
+> const serialize = require('serialize-to-js')
+> ```
+
 ## Table of Contents
 
 <!-- !toc (minlevel=2 omit="Table of Contents") -->
 
 * [Methods](#methods)
   * [serialize](#serialize)
-  * [serializeToModule](#serializetomodule)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
 
@@ -46,7 +56,7 @@ serializes an object to javascript
 #### Example - serializing regex, date, buffer, ...
 
 ```js
-var serialize = require('serialize-to-js').serialize;
+var serialize = require('serialize-to-js')
 var obj = {
   str: '<script>var a = 0 > 1</script>',
   num: 3.1415,
@@ -66,7 +76,7 @@ console.log(serialize(obj))
 #### Example - serializing while respecting references
 
 ```js
-var serialize = require('serialize-to-js').serialize;
+var serialize = require('serialize-to-js')
 var obj = { object: { regexp: /^test?$/ } };
 obj.reference = obj.object;
 var opts = { reference: true };
@@ -93,42 +103,8 @@ console.log(opts.references);
 
 ### serializeToModule
 
-`serializeToModule(source, opts, opts.ignoreCircular, opts.reference, opts.comment, opts.beautify) `
+The `serializeToModule` has been moved to it\`s own repository at [serialize-to-module][].
 
-serialize to a module which can be `require`ed.
-
-#### Example - serializing while respecting references
-
-```js
-var serialTM = require('serialize-to-js').serializeToModule;
-var obj = { object: { regexp: /^test?$/ } };
-obj.reference = obj.object;
-console.log(serialTM(obj, { reference: true }));
-//> var m = module.exports = {
-//>     object: {
-//>         regexp: /^test?$/
-//>     }
-//> };
-//> m.reference = m.object;
-```
-
-**Parameters**
-
-**source**: `Object | Array | function | Any`, source to serialize
-
-**opts**: `Object`, options
-
-**opts.ignoreCircular**: `Boolean`, ignore circular objects
-
-**opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)
-
-**opts.comment**: `Boolean`, add a comments - useful for linting tools e.g. using 'eslint-disable'
-
-**opts.beautify**: `Boolean | Object`, beautify output - default is `false`. If Object then use je-beautify options.
-
-**opts.unsafe**: `Boolean`, do not escape chars `<>/`
-
-**Returns**: `String`, serialized representation of `source` as module
 
 ## Contribution and License Agreement
 
@@ -144,4 +120,4 @@ Copyright (c) 2016- commenthol (MIT License)
 See [LICENSE][] for more info.
 
 [LICENSE]: ./LICENSE
-[safer-eval]: https://github.com/commenthol/safer-eval
+[serialize-to-module]: https://npmjs.com/package/serialize-to-module
