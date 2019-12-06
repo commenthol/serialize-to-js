@@ -6,7 +6,7 @@ function log (arg) {
   console.log(JSON.stringify(arg))
 }
 
-const isLessV13 = parseInt(process.versions.node.split('.')[0]) < 12
+const isLessV12 = parseInt(process.versions.node.split('.')[0]) < 12
 
 module.exports = {
   'string': [
@@ -143,7 +143,7 @@ module.exports = {
   ],
   'regexXss': [
     /[</script><script>alert('xss')//]/i,
-    isLessV13
+    isLessV12
       ? 'new RegExp("[<\\/script><script>alert(\'xss\')\\/\\/]", "i")'
       : 'new RegExp("[</script><script>alert(\'xss\')//]", "i")'
   ],
