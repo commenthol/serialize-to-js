@@ -33,7 +33,7 @@ module.exports = {
   ],
   'regex': [
     /test(?:it)?/ig,
-    '/test(?:it)?/gi'
+    'new RegExp("test(?:it)?", "gi")'
   ],
   'object': [
     { a: 1, b: 2 },
@@ -138,6 +138,14 @@ module.exports = {
     new Float64Array([1e12, 2000000, 3.1415, -4.9e2, 5]),
     'new Float64Array([1000000000000, 2000000, 3.1415, -490, 5])',
     'toString'
+  ],
+  'regexXss': [
+    /[</script><script>alert('xss')//]/i,
+    'new RegExp("[</script><script>alert(\'xss\')//]", "i")'
+  ],
+  'regex no flags': [
+    /abc/,
+    'new RegExp("abc", "")'
   ]
 }
 
