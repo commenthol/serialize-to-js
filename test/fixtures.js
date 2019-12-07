@@ -145,7 +145,7 @@ module.exports = {
     /[</script><script>alert('xss')//]/i,
     isLessV12
       ? 'new RegExp("[<\\/script><script>alert(\'xss\')\\/\\/]", "i")'
-      : 'new RegExp("[</script><script>alert(\'xss\')//]", "i")'
+      : 'new RegExp("[<\\/script><script>alert(\'xss\')//]", "i")'
   ],
   'regex no flags': [
     /abc/,
