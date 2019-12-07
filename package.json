@@ -1,6 +1,6 @@
 {
   "name": "serialize-to-js",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "serialize objects to javascript",
   "keywords": [
     "javascript",
