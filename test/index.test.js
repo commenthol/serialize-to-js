@@ -122,4 +122,11 @@ describe('#serialize', function () {
     var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}}'
     assert.strictEqual(res, exp)
   })
+  it('correctly serializes regular expressions', function () {
+    for (var re of [ /\//, /[</script><script>alert('xss')//]/i, /abc/, /[< /script>]/ ]) {
+      var re2 = eval(serialize(re)) // eslint-disable-line no-eval
+      assert.strictEqual(re.source, re2.source)
+      assert.strictEqual(re.flags, re2.flags)
+    }
+  })
 })

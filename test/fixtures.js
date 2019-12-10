@@ -144,8 +144,14 @@ module.exports = {
   'regexXss': [
     /[</script><script>alert('xss')//]/i,
     isLessV12
-      ? 'new RegExp("[<\\/script><script>alert(\'xss\')\\/\\/]", "i")'
-      : 'new RegExp("[<\\/script><script>alert(\'xss\')//]", "i")'
+      ? 'new RegExp("[\\u003C\\\\\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\\\\\u002F\\\\\\u002F]", "i")'
+      : 'new RegExp("[\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F]", "i")'
+  ],
+  'regexXss2': [
+    /[</ script><script>alert('xss')//]/i,
+    isLessV12
+      ? 'new RegExp("[\\u003C\\\\\\u002F script\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\\\\\u002F\\\\\\u002F]", "i")'
+      : 'new RegExp("[\\u003C\\u002F script\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F]", "i")'
   ],
   'regex no flags': [
     /abc/,
