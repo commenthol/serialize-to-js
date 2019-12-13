@@ -156,6 +156,10 @@ module.exports = {
   'regex no flags': [
     /abc/,
     'new RegExp("abc", "")'
+  ],
+  'error with unsafe message': [
+    new Error("</script><script>alert('xss')"),
+    'new Error("\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')")'
   ]
 }
 
