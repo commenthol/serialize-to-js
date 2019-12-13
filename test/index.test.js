@@ -44,7 +44,7 @@ describe('#serialize', function () {
       b: o1
     }
     var res = serialize(o)
-    var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}}'
+    var exp = '{"a": {"3": "3", "one": true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}, "b": {"3": "3", "one": true, "thr-ee": undefined, "4 four": "four\\n\\u003Ctest\\u003E\\u003C\\u002Ftest\\u003E", "five\\"(5)": 5}}'
     // console.log(JSON.stringify(res))
     assert.strictEqual(res, exp)
   })
@@ -72,7 +72,7 @@ describe('#serialize', function () {
       reference: true
     }
     var res = serialize(o, opts)
-    var exp = '{"0": {four: 4}, a: {"3": "3", one: true, "thr-ee": undefined}, c: {}}'
+    var exp = '{"0": {"four": 4}, "a": {"3": "3", "one": true, "thr-ee": undefined}, "c": {}}'
     var refs = [
       ['.a["4 four"]', '["0"]'],
       ['.b', '.a'],
@@ -103,7 +103,7 @@ describe('#serialize', function () {
     }
     o.a.b = o.a
     var res = serialize(o, { ignoreCircular: true })
-    var exp = '{a: {b: {/*[Circular]*/}}}'
+    var exp = '{"a": {"b": {/*[Circular]*/}}}'
     assert.deepStrictEqual(res, exp)
   })
   it('converting an object of objects with opts.unsafe', function () {
@@ -119,7 +119,7 @@ describe('#serialize', function () {
       b: o1
     }
     var res = serialize(o, { unsafe: true })
-    var exp = '{a: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}, b: {"3": "3", one: true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}}'
+    var exp = '{"a": {"3": "3", "one": true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}, "b": {"3": "3", "one": true, "thr-ee": undefined, "4 four": "four\\n<test></test>", "five\\"(5)": 5}}'
     assert.strictEqual(res, exp)
   })
   it('correctly serializes regular expressions', function () {

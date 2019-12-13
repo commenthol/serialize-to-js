@@ -39,7 +39,7 @@ module.exports = {
   ],
   'object': [
     { a: 1, b: 2 },
-    '{a: 1, b: 2}'
+    '{"a": 1, "b": 2}'
   ],
   'empty object': [
     {},
@@ -47,7 +47,7 @@ module.exports = {
   ],
   'object with backslash': [
     { backslash: '\\' },
-    '{backslash: "\\\\"}'
+    '{"backslash": "\\\\"}'
   ],
   'object of primitives': [
     {
@@ -59,7 +59,7 @@ module.exports = {
       six: -17,
       'se ven': 'string'
     },
-    '{"5": 3.1415, one: true, two: false, "thr-ee": undefined, four: 1, six: -17, "se ven": "string"}'
+    '{"5": 3.1415, "one": true, "two": false, "thr-ee": undefined, "four": 1, "six": -17, "se ven": "string"}'
   ],
   'function': [
     log,
@@ -72,11 +72,11 @@ module.exports = {
   ],
   'shorthand method': [
     { key(a) { return a + 1 } }, // eslint-disable-line
-    '{key: function key(a) { return a + 1 }}'
+    '{"key": function key(a) { return a + 1 }}'
   ],
   'arrow function in object': [
     { key: (a) => a + 1 },
-    '{key: (a) => a + 1}'
+    '{"key": (a) => a + 1}'
   ],
   'date': [
     new Date(24 * 12 * 3600000),
@@ -160,6 +160,14 @@ module.exports = {
   'error with unsafe message': [
     new Error("</script><script>alert('xss')"),
     'new Error("\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')")'
+  ],
+  'object with unsafe property name': [
+    { "</script><script>alert('xss')//": 0 },
+    '{"\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F": 0}'
+  ],
+  'object with backslash-escaped quote in property name': [
+    { '\\": 0}; alert(\'xss\')//': 0 },
+    '{"\\\\\\": 0}; alert(\'xss\')\\u002F\\u002F": 0}'
   ]
 }
 
