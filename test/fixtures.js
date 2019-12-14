@@ -134,21 +134,21 @@ module.exports = {
   regexXss: [
     /[</script><script>alert('xss')//]/i,
     isLessV12
-      ? `new RegExp("[\\u003C\\u005C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert('xss')\\u005C\\u002F\\u005C\\u002F]", "i")`
+      ? 'new RegExp("[\\u003C\\u005C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u005C\\u002F\\u005C\\u002F]", "i")'
       : 'new RegExp("[\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F]", "i")',
     // unsafe ...
     isLessV12
-      ? `new RegExp("[<\\u005C/script><script>alert('xss')\\u005C/\\u005C/]", "i")`
+      ? 'new RegExp("[<\\u005C/script><script>alert(\'xss\')\\u005C/\\u005C/]", "i")'
       : 'new RegExp("[</script><script>alert(\'xss\')//]", "i")'
   ],
   regexXss2: [
     /[</ script><script>alert('xss')//]/i,
     isLessV12
-      ? `new RegExp("[\\u003C\\u005C\\u002F script\\u003E\\u003Cscript\\u003Ealert('xss')\\u005C\\u002F\\u005C\\u002F]", "i")`
+      ? 'new RegExp("[\\u003C\\u005C\\u002F script\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u005C\\u002F\\u005C\\u002F]", "i")'
       : 'new RegExp("[\\u003C\\u002F script\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F]", "i")',
     // unsafe ...
     isLessV12
-      ? `new RegExp("[<\\u005C/ script><script>alert('xss')\\u005C/\\u005C/]", "i")`
+      ? 'new RegExp("[<\\u005C/ script><script>alert(\'xss\')\\u005C/\\u005C/]", "i")'
       : 'new RegExp("[</ script><script>alert(\'xss\')//]", "i")'
   ],
   'regex no flags': [
@@ -165,13 +165,13 @@ module.exports = {
     { "</script><script>alert('xss')//": 0 },
     '{"\\u003C\\u002Fscript\\u003E\\u003Cscript\\u003Ealert(\'xss\')\\u002F\\u002F": 0}',
     // unsafe ...
-    `{"</script><script>alert('xss')//": 0}`
+    '{"</script><script>alert(\'xss\')//": 0}'
   ],
   'object with backslash-escaped quote in property name': [
     { '\\": 0}; alert(\'xss\')//': 0 },
-    `{"\\u005C\\": 0}; alert('xss')\\u002F\\u002F": 0}`,
+    '{"\\u005C\\": 0}; alert(\'xss\')\\u002F\\u002F": 0}',
     // unsafe ...
-    `{"\\u005C\\": 0}; alert('xss')//": 0}`
+    '{"\\u005C\\": 0}; alert(\'xss\')//": 0}'
   ]
 }
 

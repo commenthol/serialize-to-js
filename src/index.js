@@ -120,4 +120,5 @@ function serialize (source, opts) {
     return '' + source
   }
 }
+
 module.exports = serialize

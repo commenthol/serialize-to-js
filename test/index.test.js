@@ -1,5 +1,4 @@
-/* eslint no-new-func:0 */
-/* global describe, it */
+/* eslint no-new-func: off */
 
 'use strict'
 
@@ -156,8 +155,8 @@ describe('#serialize', function () {
         .replace(/function xss\(\)/, 'function xss ()') // node v8 has no space before brackets
       assert.strictEqual(res,
         'function xss () {\n' +
-        ` const str = '\\u003C\\u002Fscript>\\u003Cscript>alert(\\'xss\\')//'\n` +
-        ` const o = { '\\\\": 0}; alert(\\'xss\\')//': 0, str }\n` +
+        ' const str = \'\\u003C\\u002Fscript>\\u003Cscript>alert(\\\'xss\\\')//\'\n' +
+        ' const o = { \'\\\\": 0}; alert(\\\'xss\\\')//\': 0, str }\n' +
         ' return o\n' +
         ' }'
       )

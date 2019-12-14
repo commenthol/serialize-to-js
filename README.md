@@ -40,6 +40,7 @@ The following Objects are supported
 
 * [Methods](#methods)
   * [serialize](#serialize)
+  * [serializeToModule](#serializetomodule)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
 
