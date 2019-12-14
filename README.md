@@ -25,7 +25,7 @@ The following Objects are supported
 
 > **Note:** Version >3.0.0 has moved the serializeToModule method into its own
 > package at [serialize-to-module][]  
->
+> 
 > Migrating from 2.x to 3.x for serialize:
 > ```js
 > // v2.x
