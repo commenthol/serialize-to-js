@@ -22,17 +22,8 @@ The following Objects are supported
 - Int16Array, Uint16Array
 - Int32Array, Uint32Array, Float32Array
 - Float64Array
-
-> **Note:** Version >3.0.0 has moved the serializeToModule method into its own
-> package at [serialize-to-module][]  
-> 
-> Migrating from 2.x to 3.x for serialize:
-> ```js
-> // v2.x
-> const serialize = require('serialize-to-js').serialize
-> // >v3.x
-> const serialize = require('serialize-to-js')
-> ```
+- Set
+- Map
 
 ## Table of Contents
 
@@ -40,7 +31,6 @@ The following Objects are supported
 
 * [Methods](#methods)
   * [serialize](#serialize)
-  * [serializeToModule](#serializetomodule)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
 
@@ -57,8 +47,8 @@ serializes an object to javascript
 #### Example - serializing regex, date, buffer, ...
 
 ```js
-var serialize = require('serialize-to-js')
-var obj = {
+const serialize = require('serialize-to-js')
+const obj = {
   str: '<script>var a = 0 > 1</script>',
   num: 3.1415,
   bool: true,
@@ -68,10 +58,17 @@ var obj = {
   arr: [1, '2'],
   regexp: /^test?$/,
   date: new Date(),
-  buffer: Buffer.from('data'),
+  buffer: new Buffer('data'),
+  set: new Set([1, 2, 3]),
+  map: new Map([['a': 1],['b': 2]])
 }
 console.log(serialize(obj))
-// > {str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E", num: 3.1415, bool: true, nil: null, undef: undefined, obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z"), buffer: new Buffer('ZGF0YQ==', 'base64')}
+//> '{str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E",
+//>   num: 3.1415, bool: true, nil: null, undef: undefined,
+//>   obj: {foo: "bar"}, arr: [1, "2"], regexp: new RegExp("^test?$", ""),
+//>   date: new Date("2019-12-29T10:37:36.613Z"),
+//>   buffer: Buffer.from("ZGF0YQ==", "base64"), set: new Set([1, 2, 3]),
+//>   map: new Map([["a", 1], ["b", 2]])}'
 ```
 
 #### Example - serializing while respecting references
@@ -89,22 +86,12 @@ console.log(opts.references);
 
 **Parameters**
 
-**source**: `Object | Array | function | Any`, source to serialize
-
-**opts**: `Object`, options
-
-**opts.ignoreCircular**: `Boolean`, ignore circular objects
-
-**opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)
-
-**opts.unsafe**: `Boolean`, do not escape chars `<>/`
-
+**source**: `Object | Array | function | Any`, source to serialize  
+**opts**: `Object`, options  
+**opts.ignoreCircular**: `Boolean`, ignore circular objects  
+**opts.reference**: `Boolean`, reference instead of a copy (requires post-processing of opts.references)  
+**opts.unsafe**: `Boolean`, do not escape chars `<>/`  
 **Returns**: `String`, serialized representation of `source`
-
-
-### serializeToModule
-
-The `serializeToModule` has been moved to it\`s own repository at [serialize-to-module][].
 
 
 ## Contribution and License Agreement
@@ -121,4 +108,3 @@ Copyright (c) 2016- commenthol (MIT License)
 See [LICENSE][] for more info.
 
 [LICENSE]: ./LICENSE
-[serialize-to-module]: https://npmjs.com/package/serialize-to-module
