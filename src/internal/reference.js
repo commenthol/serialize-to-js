@@ -5,18 +5,22 @@
 
 'use strict'
 
-var KEY = /^[a-zA-Z$_][a-zA-Z$_0-9]*$/
+const utils = require('./utils')
+
+const KEY = /^[a-zA-Z$_][a-zA-Z$_0-9]*$/
 
 /**
  * handle references
  * @constructor
  * @param {Object} references
+ * @param {boolean} opts.unsafe
  */
-function Ref (references) {
+function Ref (references, opts) {
   this.keys = []
   this.refs = []
   this.key = []
   this.references = references || []
+  this._opts = opts || {}
 }
 
 /**
@@ -25,8 +29,8 @@ function Ref (references) {
  * @param {String} key - objects key
  * @return {String} wrapped key in quotes if necessary
  */
-Ref.wrapkey = function (key) {
-  return (KEY.test(key) ? key : '"' + key.replace(/"/g, '\\"') + '"')
+Ref.wrapkey = function (key, opts) {
+  return (KEY.test(key) ? key : utils.quote(key, opts))
 }
 
 Ref.prototype = {
@@ -47,17 +51,17 @@ Ref.prototype = {
    * join the keys
    */
   join: function (key) {
-    var out = ''
+    let out = ''
     key = key || this.key
     if (typeof key === 'string') {
       key = [key]
     }
 
-    key.forEach(function (k) {
+    key.forEach(k => {
       if (KEY.test(k)) {
         out += '.' + k
       } else {
-        out += '[' + Ref.wrapkey(k) + ']'
+        out += '[' + Ref.wrapkey(k, this._opts) + ']'
       }
     })
     return out
@@ -69,7 +73,7 @@ Ref.prototype = {
    * @return {Boolean}
    */
   hasReference: function (source) {
-    var idx
+    let idx
     if (~(idx = this.refs.indexOf(source))) {
       this.references.push([this.join(), this.keys[idx]])
       return true

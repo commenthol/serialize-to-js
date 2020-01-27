@@ -6,15 +6,15 @@
 'use strict'
 
 // dependencies
-var util = require('./internal/utils')
-var Ref = require('./internal/reference')
+const utils = require('./internal/utils')
+const Ref = require('./internal/reference')
 
 /**
  * serializes an object to javascript
  *
  * @example <caption>serializing regex, date, buffer, ...</caption>
- * var serialize = require('serialize-to-js').serialize;
- * var obj = {
+ * const serialize = require('serialize-to-js').serialize;
+ * const obj = {
  *   str: '<script>var a = 0 > 1</script>',
  *   num: 3.1415,
  *   bool: true,
@@ -30,10 +30,10 @@ var Ref = require('./internal/reference')
  * // > {str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E", num: 3.1415, bool: true, nil: null, undef: undefined, obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z"), buffer: new Buffer('ZGF0YQ==', 'base64')}
  *
  * @example <caption>serializing while respecting references</caption>
- * var serialize = require('serialize-to-js').serialize;
- * var obj = { object: { regexp: /^test?$/ } };
+ * const serialize = require('serialize-to-js').serialize;
+ * const obj = { object: { regexp: /^test?$/ } };
  * obj.reference = obj.object;
- * var opts = { reference: true };
+ * const opts = { reference: true };
  * console.log(serialize(obj, opts));
  * //> {object: {regexp: /^test?$/}}
  * console.log(opts.references);
@@ -47,11 +47,7 @@ var Ref = require('./internal/reference')
  * @return {String} serialized representation of `source`
  */
 function serialize (source, opts) {
-  var out = ''
-  var key
-  var tmp
-  var type
-  var i
+  let type
 
   opts = opts || {}
   if (!opts._visited) {
@@ -59,72 +55,70 @@ function serialize (source, opts) {
   }
   if (!opts._refs) {
     opts.references = []
-    opts._refs = new Ref(opts.references)
+    opts._refs = new Ref(opts.references, opts)
   }
 
-  if (util.isNull(source)) {
-    out += 'null'
-  } else if (util.isArray(source)) {
-    tmp = source.map(function (item) {
-      return serialize(item, opts)
-    })
-    out += '[' + tmp.join(', ') + ']'
-  } else if (util.isFunction(source)) {
-    tmp = source.toString()
+  if (utils.isNull(source)) {
+    return 'null'
+  } else if (Array.isArray(source)) {
+    const tmp = source.map(item => serialize(item, opts))
+    return `[${tmp.join(', ')}]`
+  } else if (utils.isFunction(source)) {
+    // serializes functions only in unsafe mode!
+    const _tmp = source.toString()
+    const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
     // append function to es6 function within obj
-    out += !/^\s*(function|\([^)]*\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
-  } else if (util.isObject(source)) {
-    if (util.isRegExp(source)) {
-      out += 'new RegExp(' + serialize(source.source) + ', "' + source.flags + '")'
-    } else if (util.isDate(source)) {
-      out += 'new Date("' + source.toJSON() + '")'
-    } else if (util.isError(source)) {
-      out += 'new Error(' + (source.message ? '"' + source.message + '"' : '') + ')'
-    } else if (util.isBuffer(source)) {
+    return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
+  } else if (utils.isObject(source)) {
+    if (utils.isRegExp(source)) {
+      return `new RegExp(${utils.quote(source.source, opts)}, "${source.flags}")`
+    } else if (utils.isDate(source)) {
+      return `new Date(${utils.quote(source.toJSON(), opts)})`
+    } else if (utils.isError(source)) {
+      return `new Error(${utils.quote(source.message, opts)})`
+    } else if (utils.isBuffer(source)) {
       // check for buffer first otherwise tests fail on node@4.4
       // looks like buffers are accidentially detected as typed arrays
-      out += "Buffer.from('" + source.toString('base64') + "', 'base64')"
-    } else if ((type = util.isTypedArray(source))) {
-      tmp = []
-      for (i = 0; i < source.length; i++) {
+      return `Buffer.from('${source.toString('base64')}', 'base64')`
+    } else if ((type = utils.isTypedArray(source))) {
+      const tmp = []
+      for (let i = 0; i < source.length; i++) {
         tmp.push(source[i])
       }
-      out += 'new ' + type + '(' +
-        '[' + tmp.join(', ') + ']' +
-        ')'
+      return `new ${type}([${tmp.join(', ')}])`
     } else {
-      tmp = []
+      const tmp = []
       // copy properties if not circular
       if (!~opts._visited.indexOf(source)) {
         opts._visited.push(source)
-        for (key in source) {
-          if (source.hasOwnProperty(key)) {
-            if (opts.reference && util.isObject(source[key])) {
+        for (const key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            if (opts.reference && utils.isObject(source[key])) {
               opts._refs.push(key)
               if (!opts._refs.hasReference(source[key])) {
-                tmp.push(Ref.wrapkey(key) + ': ' + serialize(source[key], opts))
+                tmp.push(Ref.wrapkey(key, opts) + ': ' + serialize(source[key], opts))
               }
               opts._refs.pop()
             } else {
-              tmp.push(Ref.wrapkey(key) + ': ' + serialize(source[key], opts))
+              tmp.push(Ref.wrapkey(key, opts) + ': ' + serialize(source[key], opts))
             }
           }
         }
-        out += '{' + tmp.join(', ') + '}'
         opts._visited.pop()
+        return `{${tmp.join(', ')}}`
       } else {
         if (opts.ignoreCircular) {
-          out += '{/*[Circular]*/}'
+          return '{/*[Circular]*/}'
         } else {
           throw new Error('can not convert circular structures.')
         }
       }
     }
-  } else if (util.isString(source)) {
-    out += '"' + (opts.unsafe ? util.unsafeString(source) : util.safeString(source)) + '"'
+  } else if (utils.isString(source)) {
+    return utils.quote(source, opts)
   } else {
-    out += '' + source
+    return '' + source
   }
-  return out
 }
+
 module.exports = serialize

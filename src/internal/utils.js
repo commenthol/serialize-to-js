@@ -1,18 +1,14 @@
-/* eslint
-  no-new-func: 0
-*/
-
 'use strict'
 
-var UNSAFE_CHARS_REGEXP = /[\\\r\n\t<>\u2028\u2029"/]/g
-var CHARS_REGEXP = /[\\\r\n\t"]/g
+const UNSAFE_CHARS_REGEXP = /[<>\u2028\u2029/\\\r\n\t"]/g
+const CHARS_REGEXP = /[\\\r\n\t"]/g
 
-var UNICODE_CHARS = {
+const UNICODE_CHARS = {
   '"': '\\"',
   '\n': '\\n',
   '\r': '\\r',
   '\t': '\\t',
-  '\\': '\\\\',
+  '\\': '\\u005C',
   '<': '\\u003C',
   '>': '\\u003E',
   '/': '\\u002F',
@@ -21,66 +17,70 @@ var UNICODE_CHARS = {
 }
 
 function safeString (str) {
-  str = str.replace(UNSAFE_CHARS_REGEXP, function (unsafeChar) {
+  return str.replace(UNSAFE_CHARS_REGEXP, (unsafeChar) => {
     return UNICODE_CHARS[unsafeChar]
   })
-  return str
 }
-exports.safeString = safeString
 
 function unsafeString (str) {
-  str = str.replace(CHARS_REGEXP, function (unsafeChar) {
-    return UNICODE_CHARS[unsafeChar]
-  })
+  str = str.replace(CHARS_REGEXP, (unsafeChar) => UNICODE_CHARS[unsafeChar])
   return str
 }
-exports.unsafeString = unsafeString
 
-var isArray = exports.isArray = Array.isArray
-exports.isArray = isArray
+function quote (str, opts) {
+  const fn = opts.unsafe ? unsafeString : safeString
+  return str ? `"${fn(str)}"` : ''
+}
+
+function saferFunctionString (str, opts) {
+  return opts.unsafe
+    ? str
+    : str.replace(/(<\/?)([a-z][^>]*?>)/ig, (m, m1, m2) => safeString(m1) + m2)
+}
+
+function objectToString (o) {
+  return Object.prototype.toString.call(o)
+}
+
+function toType (o) {
+  const type = objectToString(o)
+  return type.substring(8, type.length - 1)
+}
 
 function isString (arg) {
   return typeof arg === 'string'
 }
-exports.isString = isString
 
 function isNull (arg) {
   return arg === null
 }
-exports.isNull = isNull
 
 function isRegExp (re) {
   return isObject(re) && objectToString(re) === '[object RegExp]'
 }
-exports.isRegExp = isRegExp
 
 function isObject (arg) {
   return typeof arg === 'object' && arg !== null
 }
-exports.isObject = isObject
 
 function isDate (d) {
   return isObject(d) && objectToString(d) === '[object Date]'
 }
-exports.isDate = isDate
 
 function isError (e) {
   return isObject(e) &&
       (objectToString(e) === '[object Error]' || e instanceof Error)
 }
-exports.isError = isError
 
 function isFunction (arg) {
   return typeof arg === 'function'
 }
-exports.isFunction = isFunction
 
 function isBuffer (arg) {
   return arg instanceof Buffer
 }
-exports.isBuffer = isBuffer
 
-var TYPED_ARRAYS = [
+const TYPED_ARRAYS = [
   'Int8Array',
   'Uint8Array',
   'Uint8ClampedArray',
@@ -93,17 +93,24 @@ var TYPED_ARRAYS = [
 ]
 
 function isTypedArray (arg) {
-  var type = toType(arg)
+  const type = toType(arg)
   if (TYPED_ARRAYS.indexOf(type) !== -1) {
     return type
   }
 }
-exports.isTypedArray = isTypedArray
 
-function objectToString (o) {
-  return Object.prototype.toString.call(o)
-}
-
-function toType (o) {
-  return objectToString(o).replace(/^\[object (.*)\]$/, '$1')
+module.exports = {
+  safeString,
+  unsafeString,
+  quote,
+  saferFunctionString,
+  isString,
+  isNull,
+  isRegExp,
+  isObject,
+  isDate,
+  isError,
+  isFunction,
+  isBuffer,
+  isTypedArray
 }
