@@ -68,5 +68,8 @@
   "engines": {
     "node": ">=4.0.0"
   },
-  "maintainers": "commenthol <commenthol@gmail.com>"
+  "maintainers": "commenthol <commenthol@gmail.com>",
+  "mocha": {
+    "check-leaks": true
+  }
 }

@@ -38,65 +38,23 @@ function saferFunctionString (str, opts) {
     : str.replace(/(<\/?)([a-z][^>]*?>)/ig, (m, m1, m2) => safeString(m1) + m2)
 }
 
-function objectToString (o) {
-  return Object.prototype.toString.call(o)
-}
-
-function toType (o) {
-  const type = objectToString(o)
-  return type.substring(8, type.length - 1)
-}
-
-function isString (arg) {
-  return typeof arg === 'string'
-}
-
-function isNull (arg) {
-  return arg === null
-}
-
-function isRegExp (re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]'
-}
-
 function isObject (arg) {
   return typeof arg === 'object' && arg !== null
-}
-
-function isDate (d) {
-  return isObject(d) && objectToString(d) === '[object Date]'
-}
-
-function isError (e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error)
-}
-
-function isFunction (arg) {
-  return typeof arg === 'function'
 }
 
 function isBuffer (arg) {
   return arg instanceof Buffer
 }
 
-const TYPED_ARRAYS = [
-  'Int8Array',
-  'Uint8Array',
-  'Uint8ClampedArray',
-  'Int16Array',
-  'Uint16Array',
-  'Int32Array',
-  'Uint32Array',
-  'Float32Array',
-  'Float64Array'
-]
+function isInvalidDate (arg) {
+  return isNaN(arg.getTime())
+}
 
-function isTypedArray (arg) {
-  const type = toType(arg)
-  if (TYPED_ARRAYS.indexOf(type) !== -1) {
-    return type
-  }
+function toType (o) {
+  const _type = Object.prototype.toString.call(o)
+  const type = _type.substring(8, _type.length - 1)
+  if (type === 'Uint8Array' && isBuffer(o)) return 'Buffer'
+  return type
 }
 
 module.exports = {
@@ -104,13 +62,8 @@ module.exports = {
   unsafeString,
   quote,
   saferFunctionString,
-  isString,
-  isNull,
-  isRegExp,
-  isObject,
-  isDate,
-  isError,
-  isFunction,
   isBuffer,
-  isTypedArray
+  isObject,
+  isInvalidDate,
+  toType
 }

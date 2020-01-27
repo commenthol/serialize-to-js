@@ -13,7 +13,7 @@ const Ref = require('./internal/reference')
  * serializes an object to javascript
  *
  * @example <caption>serializing regex, date, buffer, ...</caption>
- * const serialize = require('serialize-to-js').serialize;
+ * const serialize = require('serialize-to-js')
  * const obj = {
  *   str: '<script>var a = 0 > 1</script>',
  *   num: 3.1415,
@@ -25,12 +25,19 @@ const Ref = require('./internal/reference')
  *   regexp: /^test?$/,
  *   date: new Date(),
  *   buffer: new Buffer('data'),
+ *   set: new Set([1, 2, 3]),
+ *   map: new Map([['a': 1],['b': 2]])
  * }
  * console.log(serialize(obj))
- * // > {str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E", num: 3.1415, bool: true, nil: null, undef: undefined, obj: {foo: "bar"}, arr: [1, "2"], regexp: /^test?$/, date: new Date("2016-04-15T16:22:52.009Z"), buffer: new Buffer('ZGF0YQ==', 'base64')}
+ * //> '{str: "\u003Cscript\u003Evar a = 0 \u003E 1\u003C\u002Fscript\u003E",
+ * //>   num: 3.1415, bool: true, nil: null, undef: undefined,
+ * //>   obj: {foo: "bar"}, arr: [1, "2"], regexp: new RegExp("^test?$", ""),
+ * //>   date: new Date("2019-12-29T10:37:36.613Z"),
+ * //>   buffer: Buffer.from("ZGF0YQ==", "base64"), set: new Set([1, 2, 3]),
+ * //>   map: new Map([["a", 1], ["b", 2]])}'
  *
  * @example <caption>serializing while respecting references</caption>
- * const serialize = require('serialize-to-js').serialize;
+ * const serialize = require('serialize-to-js')
  * const obj = { object: { regexp: /^test?$/ } };
  * obj.reference = obj.object;
  * const opts = { reference: true };
@@ -46,79 +53,109 @@ const Ref = require('./internal/reference')
  * @param {Boolean} opts.unsafe - do not escape chars `<>/`
  * @return {String} serialized representation of `source`
  */
-function serialize (source, opts) {
-  let type
-
+function serialize (source, opts = {}) {
   opts = opts || {}
-  if (!opts._visited) {
-    opts._visited = []
-  }
-  if (!opts._refs) {
-    opts.references = []
-    opts._refs = new Ref(opts.references, opts)
-  }
 
-  if (utils.isNull(source)) {
-    return 'null'
-  } else if (Array.isArray(source)) {
-    const tmp = source.map(item => serialize(item, opts))
-    return `[${tmp.join(', ')}]`
-  } else if (utils.isFunction(source)) {
-    // serializes functions only in unsafe mode!
-    const _tmp = source.toString()
-    const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
-    // append function to es6 function within obj
-    return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
-  } else if (utils.isObject(source)) {
-    if (utils.isRegExp(source)) {
-      return `new RegExp(${utils.quote(source.source, opts)}, "${source.flags}")`
-    } else if (utils.isDate(source)) {
-      return `new Date(${utils.quote(source.toJSON(), opts)})`
-    } else if (utils.isError(source)) {
-      return `new Error(${utils.quote(source.message, opts)})`
-    } else if (utils.isBuffer(source)) {
-      // check for buffer first otherwise tests fail on node@4.4
-      // looks like buffers are accidentially detected as typed arrays
-      return `Buffer.from('${source.toString('base64')}', 'base64')`
-    } else if ((type = utils.isTypedArray(source))) {
-      const tmp = []
-      for (let i = 0; i < source.length; i++) {
-        tmp.push(source[i])
+  const visited = new Set()
+  opts.references = []
+  const refs = new Ref(opts.references, opts)
+
+  function stringify (source, opts) {
+    const type = utils.toType(source)
+
+    if (visited.has(source)) {
+      if (opts.ignoreCircular) {
+        switch (type) {
+          case 'Array':
+            return '[/*[Circular]*/]'
+          case 'Object':
+            return '{/*[Circular]*/}'
+          default:
+            return 'undefined /*[Circular]*/'
+        }
+      } else {
+        throw new Error('can not convert circular structures.')
       }
-      return `new ${type}([${tmp.join(', ')}])`
-    } else {
-      const tmp = []
-      // copy properties if not circular
-      if (!~opts._visited.indexOf(source)) {
-        opts._visited.push(source)
+    }
+
+    switch (type) {
+      case 'Null':
+        return 'null'
+      case 'String':
+        return utils.quote(source, opts)
+      case 'Function': {
+        const _tmp = source.toString()
+        const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
+        // append function to es6 function within obj
+        return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
+      }
+      case 'RegExp':
+        return `new RegExp(${utils.quote(source.source, opts)}, "${source.flags}")`
+      case 'Date':
+        if (utils.isInvalidDate(source)) return 'new Date("Invalid Date")'
+        return `new Date(${utils.quote(source.toJSON(), opts)})`
+      case 'Error':
+        return `new Error(${utils.quote(source.message, opts)})`
+      case 'Buffer':
+        return `Buffer.from("${source.toString('base64')}", "base64")`
+      case 'Array': {
+        visited.add(source)
+        const tmp = source.map(item => stringify(item, opts))
+        visited.delete(source)
+        return `[${tmp.join(', ')}]`
+      }
+      case 'Int8Array':
+      case 'Uint8Array':
+      case 'Uint8ClampedArray':
+      case 'Int16Array':
+      case 'Uint16Array':
+      case 'Int32Array':
+      case 'Uint32Array':
+      case 'Float32Array':
+      case 'Float64Array': {
+        const tmp = []
+        for (let i = 0; i < source.length; i++) {
+          tmp.push(source[i])
+        }
+        return `new ${type}([${tmp.join(', ')}])`
+      }
+      case 'Set': {
+        visited.add(source)
+        const tmp = Array.from(source).map(item => stringify(item, opts))
+        visited.delete(source)
+        return `new ${type}([${tmp.join(', ')}])`
+      }
+      case 'Map': {
+        visited.add(source)
+        const tmp = Array.from(source).map(([key, value]) => `[${stringify(key, opts)}, ${stringify(value, opts)}]`)
+        visited.delete(source)
+        return `new ${type}([${tmp.join(', ')}])`
+      }
+      case 'Object': {
+        visited.add(source)
+        const tmp = []
         for (const key in source) {
           if (Object.prototype.hasOwnProperty.call(source, key)) {
             if (opts.reference && utils.isObject(source[key])) {
-              opts._refs.push(key)
-              if (!opts._refs.hasReference(source[key])) {
-                tmp.push(Ref.wrapkey(key, opts) + ': ' + serialize(source[key], opts))
+              refs.push(key)
+              if (!refs.hasReference(source[key])) {
+                tmp.push(Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts))
               }
-              opts._refs.pop()
+              refs.pop()
             } else {
-              tmp.push(Ref.wrapkey(key, opts) + ': ' + serialize(source[key], opts))
+              tmp.push(Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts))
             }
           }
         }
-        opts._visited.pop()
+        visited.delete(source)
         return `{${tmp.join(', ')}}`
-      } else {
-        if (opts.ignoreCircular) {
-          return '{/*[Circular]*/}'
-        } else {
-          throw new Error('can not convert circular structures.')
-        }
       }
+      default:
+        return '' + source
     }
-  } else if (utils.isString(source)) {
-    return utils.quote(source, opts)
-  } else {
-    return '' + source
   }
+
+  return stringify(source, opts)
 }
 
 module.exports = serialize
