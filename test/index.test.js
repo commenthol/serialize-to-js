@@ -43,7 +43,8 @@ describe('serialize-to-js', function () {
     test('NaN', NaN, 'NaN')
     test('Infinity', Infinity, 'Infinity')
     test('string', "string's\n\"new\"   line", '"string\'s\\n\\"new\\"   line"')
-    test('nul', '\0', '"\u0000"')
+    test('empty string', '', '""')
+    test('nul string', '\0', '"\u0000"')
     test('string with unsafe characters',
       '<script type="application/javascript">\u2028\u2029\nvar a = 0;\nvar b = 1; a > 1;\n</script>',
       '"\\u003Cscript type=\\"application\\u002Fjavascript\\"\\u003E\\u2028\\u2029\\nvar a = 0;\\nvar b = 1; a \\u003E 1;\\n\\u003C\\u002Fscript\\u003E"'

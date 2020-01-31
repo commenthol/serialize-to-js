@@ -82,7 +82,7 @@ function serialize (source, opts = {}) {
       case 'Null':
         return 'null'
       case 'String':
-        return utils.quote(source, opts)
+        return utils.quote(source, opts) || '""'
       case 'Function': {
         const _tmp = source.toString()
         const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
