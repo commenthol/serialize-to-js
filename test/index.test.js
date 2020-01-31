@@ -36,6 +36,7 @@ describe('serialize-to-js', function () {
     test('null', null, 'null')
     test('boolean', true, 'true')
     test('number', 3.1415, '3.1415')
+    test('zero', 0, '0')
     test('number int', 3, '3')
     test('number negative int', -13, '-13')
     test('number float', 0.1, '0.1')
