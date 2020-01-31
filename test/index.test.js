@@ -36,6 +36,7 @@ describe('serialize-to-js', function () {
     test('null', null, 'null')
     test('boolean', true, 'true')
     test('number', 3.1415, '3.1415')
+    test('zero', 0, '0')
     test('number int', 3, '3')
     test('number negative int', -13, '-13')
     test('number float', 0.1, '0.1')
@@ -43,7 +44,8 @@ describe('serialize-to-js', function () {
     test('NaN', NaN, 'NaN')
     test('Infinity', Infinity, 'Infinity')
     test('string', "string's\n\"new\"   line", '"string\'s\\n\\"new\\"   line"')
-    test('nul', '\0', '"\u0000"')
+    test('empty string', '', '""')
+    test('nul string', '\0', '"\u0000"')
     test('string with unsafe characters',
       '<script type="application/javascript">\u2028\u2029\nvar a = 0;\nvar b = 1; a > 1;\n</script>',
       '"\\u003Cscript type=\\"application\\u002Fjavascript\\"\\u003E\\u2028\\u2029\\nvar a = 0;\\nvar b = 1; a \\u003E 1;\\n\\u003C\\u002Fscript\\u003E"'
