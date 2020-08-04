@@ -12,6 +12,7 @@ if (typeof assert.deepStrictEqual === 'undefined') {
 const isBrowser = (typeof window !== 'undefined')
 
 function log (arg) {
+  // eslint-disable-next-line no-console
   console.log(JSON.stringify(arg))
 }
 
