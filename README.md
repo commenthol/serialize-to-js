@@ -3,7 +3,8 @@
 > serialize objects to javascript
 
 [![NPM version](https://badge.fury.io/js/serialize-to-js.svg)](https://www.npmjs.com/package/serialize-to-js/)
-[![Build Status](https://secure.travis-ci.org/commenthol/serialize-to-js.svg?branch=master)](https://travis-ci.org/commenthol/serialize-to-js)
+[![Build Status](https://github.com/commenthol/serialize-to-js/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/commenthol/serialize-to-js/actions/workflows/ci.yml?query=branch%3Amaster)
+
 
 Serialize objects into a string while checking circular structures and respecting references.
 
