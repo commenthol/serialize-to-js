@@ -15,7 +15,7 @@ const KEY = /^[a-zA-Z$_][a-zA-Z$_0-9]*$/
  * @param {Object} references
  * @param {boolean} opts.unsafe
  */
-function Ref (references, opts) {
+function Ref(references, opts) {
   this.keys = []
   this.refs = []
   this.key = []
@@ -30,7 +30,7 @@ function Ref (references, opts) {
  * @return {String} wrapped key in quotes if necessary
  */
 Ref.wrapkey = function (key, opts) {
-  return (KEY.test(key) ? key : utils.quote(key, opts))
+  return KEY.test(key) ? key : utils.quote(key, opts)
 }
 
 Ref.prototype = {
