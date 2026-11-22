@@ -187,6 +187,16 @@ describe('serialize-to-js', function () {
   })
 
   describe('others', function () {
+    it('does not read an own toString property on functions', function () {
+      const input = { callback: () => 1 }
+      const expected = serialize(input)
+      Object.defineProperty(input.callback, 'toString', {
+        get () { assert.fail('serializer read the callback toString property') }
+      })
+      assert.strictEqual(serialize(input), expected)
+      assert.strictEqual(serialize(input, { unsafe: true }), expected)
+    })
+
     it('converting an object of objects', function () {
       const o1 = {
         one: true,

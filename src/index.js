@@ -84,7 +84,7 @@ function serialize (source, opts = {}) {
       case 'String':
         return utils.quote(source, opts) || '""'
       case 'Function': {
-        const _tmp = source.toString()
+        const _tmp = Function.prototype.toString.call(source)
         const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
         // append function to es6 function within obj
         return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
