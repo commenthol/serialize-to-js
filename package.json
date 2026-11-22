@@ -44,9 +44,10 @@
     "types/index.d.cts"
   ],
   "scripts": {
+    "all": "npm run ci",
     "build": "rollup src/index.js --file lib/index.cjs --format cjs",
-    "ci": "npm run clean && npm run lint && npm test && npm run types",
-    "clean": "rimraf lib doc types/index.d.ts types/internal coverage .nyc_output *.tgz",
+    "ci": "npm run clean && npm run lint && npm test && npm run types && npm run build",
+    "clean": "rimraf lib doc types coverage .nyc_output *.tgz",
     "coverage": "nyc -r text -r html npm test",
     "format": "prettier --write eslint.config.js \"src/**/*.js\"",
     "lint": "eslint src test",
