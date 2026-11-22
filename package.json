@@ -18,20 +18,41 @@
   "license": "MIT",
   "author": "commenthol <commenthol@gmail.com>",
   "maintainers": "commenthol <commenthol@gmail.com>",
-  "main": "src",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./types/index.d.ts",
+        "default": "./src/index.js"
+      },
+      "require": {
+        "types": "./types/index.d.cts",
+        "default": "./lib/index.cjs"
+      }
+    }
+  },
+  "main": "./lib/index.cjs",
+  "module": "./src/index.js",
+  "types": "./types/index.d.ts",
   "directories": {
     "test": "test"
   },
   "files": [
-    "src"
+    "lib",
+    "src",
+    "types/index.d.ts",
+    "types/index.d.cts"
   ],
   "scripts": {
-    "ci": "npm run clean && npm run lint && npm test",
-    "clean": "rimraf lib doc coverage .nyc_output *.tgz",
+    "build": "rollup src/index.js --file lib/index.cjs --format cjs",
+    "ci": "npm run clean && npm run lint && npm test && npm run types",
+    "clean": "rimraf lib doc types/index.d.ts types/internal coverage .nyc_output *.tgz",
     "coverage": "nyc -r text -r html npm test",
-    "lint": "eslint src test",
     "format": "prettier --write eslint.config.js \"src/**/*.js\"",
-    "test": "mocha"
+    "lint": "eslint src test",
+    "prepack": "npm run build && npm run types",
+    "test": "npm run build && mocha",
+    "types": "tsc -p tsconfig.json"
   },
   "mocha": {
     "check-leaks": true
@@ -41,9 +62,11 @@
     "mocha": "^12.0.3",
     "nyc": "^18.0.0",
     "prettier": "^3.10.1",
-    "rimraf": "^6.1.4"
+    "rimraf": "^6.1.4",
+    "rollup": "^4.68.8",
+    "typescript": "^7.0.2"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=12.17.0"
   }
 }

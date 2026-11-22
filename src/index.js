@@ -3,11 +3,9 @@
  * @license MIT
  */
 
-'use strict'
-
 // dependencies
-const utils = require('./internal/utils')
-const Ref = require('./internal/reference')
+import * as utils from './internal/utils.js'
+import Ref from './internal/reference.js'
 
 /**
  * serializes an object to javascript
@@ -46,12 +44,13 @@ const Ref = require('./internal/reference')
  * console.log(opts.references);
  * //> [ [ '.reference', '.object' ] ]
  *
- * @param {Object|Array|Function|Any} source - source to serialize
+ * @param {unknown} source - source to serialize
  * @param {Object} [opts] - options
- * @param {Boolean} opts.ignoreCircular - ignore circular objects
- * @param {Boolean} opts.reference - reference instead of a copy (requires post-processing of opts.references)
- * @param {Boolean} opts.unsafe - do not escape chars `<>/`
- * @return {String} serialized representation of `source`
+ * @param {boolean} [opts.ignoreCircular] - ignore circular objects
+ * @param {boolean} [opts.reference] - reference instead of a copy (requires post-processing of opts.references)
+ * @param {boolean} [opts.unsafe] - do not escape chars `<>/`
+ * @param {Array<[string, string]>} [opts.references] - populated with references when `reference` is enabled
+ * @return {string} serialized representation of `source`
  */
 function serialize(source, opts = {}) {
   opts = opts || {}
@@ -167,4 +166,4 @@ function serialize(source, opts = {}) {
   return stringify(source, opts)
 }
 
-module.exports = serialize
+export default serialize

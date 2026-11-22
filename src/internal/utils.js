@@ -1,5 +1,3 @@
-'use strict'
-
 const UNSAFE_CHARS_REGEXP = /[<>\u2028\u2029/\\\r\n\t"]/g
 const CHARS_REGEXP = /[\\\r\n\t"]/g
 
@@ -57,7 +55,7 @@ function toType(o) {
   return type
 }
 
-module.exports = {
+export {
   safeString,
   unsafeString,
   quote,

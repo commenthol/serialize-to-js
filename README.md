@@ -43,12 +43,12 @@ The following Objects are supported
 
 `serialize(source, opts, opts.ignoreCircular, opts.reference)`
 
-serializes an object to javascript
+serializes an object to javascript. Use `import serialize from 'serialize-to-js'` in ES modules; CommonJS remains supported with `require('serialize-to-js')`.
 
 #### Example - serializing regex, date, buffer, ...
 
 ```js
-const serialize = require('serialize-to-js')
+import serialize from 'serialize-to-js'
 const obj = {
   str: '<script>var a = 0 > 1</script>',
   num: 3.1415,
@@ -75,7 +75,7 @@ console.log(serialize(obj))
 #### Example - serializing while respecting references
 
 ```js
-var serialize = require('serialize-to-js')
+import serialize from 'serialize-to-js'
 var obj = { object: { regexp: /^test?$/ } };
 obj.reference = obj.object;
 var opts = { reference: true };
