@@ -6,7 +6,7 @@ const assert = require('assert')
 const serialize = require('../src')
 
 if (typeof assert.deepStrictEqual === 'undefined') {
-  assert.deepStrictEqual = assert.deepEqual // eslint-disable-line
+  assert.deepStrictEqual = assert.deepEqual
 }
 
 const isBrowser = (typeof window !== 'undefined')
@@ -268,7 +268,7 @@ describe('serialize-to-js', function () {
     })
     it('correctly serializes regular expressions', function () {
       for (const re of [/\//, /[</script><script>alert('xss')//]/i, /abc/, /[< /script>]/]) {
-        const re2 = eval(serialize(re)) // eslint-disable-line no-eval
+        const re2 = eval(serialize(re))  
         assert.strictEqual(re.source, re2.source)
         assert.strictEqual(re.flags, re2.flags)
       }
@@ -296,17 +296,17 @@ describe('serialize-to-js', function () {
       })
     })
     it('shall unmarshal to Invalid Date', function () {
-      const res = eval(serialize(new Date('Invalid'))) // eslint-disable-line no-eval
+      const res = eval(serialize(new Date('Invalid')))  
       assert.strictEqual(res.toString(), new Date('Invalid').toString())
     })
     it('shall unmarshal Set', function () {
       const set = new Set(['a', 1.2, true, ['b', 3], { c: 4 }])
-      const res = eval(serialize(set)) // eslint-disable-line no-eval
+      const res = eval(serialize(set))  
       assert.deepStrictEqual(Array.from(res), Array.from(set))
     })
     it('shall unmarshal Map', function () {
       const map = new Map([['a', 'a'], [1.2, 1.2], [true, true], [['b', 3], ['b', 3]], [{ c: 4 }, { c: 4 }]])
-      const res = eval(serialize(map)) // eslint-disable-line no-eval
+      const res = eval(serialize(map))  
       assert.deepStrictEqual(Array.from(res), Array.from(map))
     })
   })

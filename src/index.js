@@ -53,14 +53,14 @@ const Ref = require('./internal/reference')
  * @param {Boolean} opts.unsafe - do not escape chars `<>/`
  * @return {String} serialized representation of `source`
  */
-function serialize (source, opts = {}) {
+function serialize(source, opts = {}) {
   opts = opts || {}
 
   const visited = new Set()
   opts.references = []
   const refs = new Ref(opts.references, opts)
 
-  function stringify (source, opts) {
+  function stringify(source, opts) {
     const type = utils.toType(source)
 
     if (visited.has(source)) {
@@ -87,7 +87,9 @@ function serialize (source, opts = {}) {
         const _tmp = Function.prototype.toString.call(source)
         const tmp = opts.unsafe ? _tmp : utils.saferFunctionString(_tmp, opts)
         // append function to es6 function within obj
-        return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp) ? 'function ' + tmp : tmp
+        return !/^\s*(function|\([^)]*?\)\s*=>)/m.test(tmp)
+          ? 'function ' + tmp
+          : tmp
       }
       case 'RegExp':
         return `new RegExp(${utils.quote(source.source, opts)}, "${source.flags}")`
@@ -127,7 +129,10 @@ function serialize (source, opts = {}) {
       }
       case 'Map': {
         visited.add(source)
-        const tmp = Array.from(source).map(([key, value]) => `[${stringify(key, opts)}, ${stringify(value, opts)}]`)
+        const tmp = Array.from(source).map(
+          ([key, value]) =>
+            `[${stringify(key, opts)}, ${stringify(value, opts)}]`
+        )
         visited.delete(source)
         return `new ${type}([${tmp.join(', ')}])`
       }
@@ -139,11 +144,15 @@ function serialize (source, opts = {}) {
             if (opts.reference && utils.isObject(source[key])) {
               refs.push(key)
               if (!refs.hasReference(source[key])) {
-                tmp.push(Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts))
+                tmp.push(
+                  Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts)
+                )
               }
               refs.pop()
             } else {
-              tmp.push(Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts))
+              tmp.push(
+                Ref.wrapkey(key, opts) + ': ' + stringify(source[key], opts)
+              )
             }
           }
         }

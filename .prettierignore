@@ -1,0 +1,2 @@
+# Tests assert exact function source text, so formatting changes their behavior.
+test/index.test.js

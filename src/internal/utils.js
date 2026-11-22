@@ -16,41 +16,41 @@ const UNICODE_CHARS = {
   '\u2029': '\\u2029'
 }
 
-function safeString (str) {
-  return str.replace(UNSAFE_CHARS_REGEXP, (unsafeChar) => {
+function safeString(str) {
+  return str.replace(UNSAFE_CHARS_REGEXP, unsafeChar => {
     return UNICODE_CHARS[unsafeChar]
   })
 }
 
-function unsafeString (str) {
-  str = str.replace(CHARS_REGEXP, (unsafeChar) => UNICODE_CHARS[unsafeChar])
+function unsafeString(str) {
+  str = str.replace(CHARS_REGEXP, unsafeChar => UNICODE_CHARS[unsafeChar])
   return str
 }
 
-function quote (str, opts) {
+function quote(str, opts) {
   const fn = opts.unsafe ? unsafeString : safeString
   return str ? `"${fn(str)}"` : ''
 }
 
-function saferFunctionString (str, opts) {
+function saferFunctionString(str, opts) {
   return opts.unsafe
     ? str
-    : str.replace(/(<\/?)([a-z][^>]*?>)/ig, (m, m1, m2) => safeString(m1) + m2)
+    : str.replace(/(<\/?)([a-z][^>]*?>)/gi, (m, m1, m2) => safeString(m1) + m2)
 }
 
-function isObject (arg) {
+function isObject(arg) {
   return typeof arg === 'object' && arg !== null
 }
 
-function isBuffer (arg) {
+function isBuffer(arg) {
   return arg instanceof Buffer
 }
 
-function isInvalidDate (arg) {
+function isInvalidDate(arg) {
   return isNaN(arg.getTime())
 }
 
-function toType (o) {
+function toType(o) {
   const _type = Object.prototype.toString.call(o)
   const type = _type.substring(8, _type.length - 1)
   if (type === 'Uint8Array' && isBuffer(o)) return 'Buffer'
