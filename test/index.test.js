@@ -1,9 +1,10 @@
 /* eslint no-new-func: off */
 
-'use strict'
+import assert from 'assert'
+import { createRequire } from 'module'
+import serialize from 'serialize-to-js'
 
-const assert = require('assert')
-const serialize = require('../src')
+const cjsSerialize = createRequire(import.meta.url)('serialize-to-js')
 
 if (typeof assert.deepStrictEqual === 'undefined') {
   assert.deepStrictEqual = assert.deepEqual
@@ -21,6 +22,9 @@ const isLessV12 = parseInt(process.versions.node.split('.')[0]) < 12
 describe.node = isBrowser ? describe.skip : describe
 
 describe('serialize-to-js', function () {
+  it('builds a CommonJS entry point', function () {
+    assert.strictEqual(cjsSerialize({ foo: 'bar' }), serialize({ foo: 'bar' }))
+  })
   function test (name, inp, exp, unsafe) {
     it(name, function () {
       const res = serialize(inp, { unsafe })

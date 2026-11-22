@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = [
+export default [
   {
     ignores: ['coverage/**', 'tmp/**', 'lib/**']
   },
@@ -8,7 +6,7 @@ module.exports = [
     files: ['src/**/*.js', 'test/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'commonjs'
+      sourceType: 'module'
     },
     rules: {
       'key-spacing': 'off',

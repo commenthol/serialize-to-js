@@ -3,11 +3,9 @@
  * @license MIT
  */
 
-'use strict'
-
 // dependencies
-const utils = require('./internal/utils')
-const Ref = require('./internal/reference')
+import * as utils from './internal/utils.js'
+import Ref from './internal/reference.js'
 
 /**
  * serializes an object to javascript
@@ -168,4 +166,4 @@ function serialize(source, opts = {}) {
   return stringify(source, opts)
 }
 
-module.exports = serialize
+export default serialize

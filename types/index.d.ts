@@ -1,4 +1,3 @@
-export = serialize;
 /**
  * serializes an object to javascript
  *
@@ -50,3 +49,4 @@ declare function serialize(source: unknown, opts?: {
     unsafe?: boolean;
     references?: Array<[string, string]>;
 }): string;
+export default serialize;

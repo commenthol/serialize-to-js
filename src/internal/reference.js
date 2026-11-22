@@ -3,9 +3,7 @@
  * @license MIT
  */
 
-'use strict'
-
-const utils = require('./utils')
+import * as utils from './utils.js'
 
 const KEY = /^[a-zA-Z$_][a-zA-Z$_0-9]*$/
 
@@ -91,4 +89,4 @@ Ref.prototype = {
   }
 }
 
-module.exports = Ref
+export default Ref

@@ -1,4 +1,3 @@
-export = Ref;
 /**
  * handle references
  * @constructor
@@ -36,3 +35,4 @@ declare namespace Ref {
         getReferences: () => any[];
     };
 }
+export default Ref;
